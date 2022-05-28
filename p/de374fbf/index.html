@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
+<html lang="zh-CN" data-default-color-scheme=dark>
 
 
 
@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://gls.show/image/default.png">
 <meta property="article:published_time" content="2022-05-28T10:06:50.371Z">
-<meta property="article:modified_time" content="2022-05-28T18:29:00.914Z">
+<meta property="article:modified_time" content="2022-05-28T19:02:45.993Z">
 <meta property="article:author" content="郭佳明">
 <meta property="article:tag" content="操作系统，csapp">
 <meta name="twitter:card" content="summary_large_image">
@@ -210,7 +210,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          661 字
+          1.9k 字
         
       </span>
     
@@ -222,7 +222,7 @@
         
         
           <!-- compatible with older versions-->
-          3 分钟
+          6 分钟
         
       </span>
     
@@ -321,11 +321,43 @@
 <blockquote>
 <p>(Rb,Ri)    Mem[Reg[Rb]+Reg[Ri]]<br>        D(Rb,Ri)    Mem[Reg[Rb]+Reg[Ri]+D]<br>        (Rb,Ri,S)    Mem[Reg[Rb]+S*Reg[Ri]]</p>
 </blockquote>
+<h1 id="mov对应的C语言语句"><a href="#mov对应的C语言语句" class="headerlink" title="mov对应的C语言语句"></a>mov对应的C语言语句</h1><p>movq $0x4,%rax </p>
+<ul>
+<li>temp = 0x4;</li>
+</ul>
+<p>movq $-147,  (%rax)</p>
+<ul>
+<li>*p = -147;</li>
+</ul>
+<p>movq %rax,   %rdx</p>
+<ul>
+<li>temp2 = temp1</li>
+</ul>
+<p>movq %rax,   (%rdx)</p>
+<ul>
+<li>*p = temp;</li>
+</ul>
+<p>movq (%rax), %rdx</p>
+<ul>
+<li>temp = *p;</li>
+</ul>
 <h1 id="swap函数"><a href="#swap函数" class="headerlink" title="swap函数"></a>swap函数</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">swap</span></span><br><span class="hljs-function">   <span class="hljs-params">(<span class="hljs-keyword">long</span> *xp, <span class="hljs-keyword">long</span> *yp)</span> </span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">long</span> t0 = *xp;<br>  <span class="hljs-keyword">long</span> t1 = *yp;<br>  *xp = t1;<br>  *yp = t0;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>对应汇编：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs log">swap:<br>   movq    (%rdi), %rax  # t0 = *xp  <br>   movq    (%rsi), %rdx  # t1 = *yp<br>   movq    %rdx, (%rdi)  # *xp = t1<br>   movq    %rax, (%rsi)  # *yp = t0<br>   ret<br></code></pre></td></tr></table></figure>
 
-<h1 id="使用objdump分析sumstore函数"><a href="#使用objdump分析sumstore函数" class="headerlink" title="使用objdump分析sumstore函数"></a>使用objdump分析sumstore函数</h1>
+<h1 id="C语言程序与汇编的转换"><a href="#C语言程序与汇编的转换" class="headerlink" title="C语言程序与汇编的转换"></a>C语言程序与汇编的转换</h1><p>C语言程序：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">plus</span><span class="hljs-params">(<span class="hljs-keyword">long</span> x, <span class="hljs-keyword">long</span> y)</span></span>; <br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sumstore</span><span class="hljs-params">(<span class="hljs-keyword">long</span> x, <span class="hljs-keyword">long</span> y, </span></span><br><span class="hljs-params"><span class="hljs-function">                          <span class="hljs-keyword">long</span> *dest)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">long</span> t = plus(x, y);<br>    *dest = t;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">gcc –Og –S sum.c<br></code></pre></td></tr></table></figure>
+
+<p>生成的汇编：</p>
+<figure class="highlight mips"><figcaption><span>Assembly</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs MIPS">        .file   <span class="hljs-string">&quot;fk.c&quot;</span><br>        <span class="hljs-meta">.text</span><br>        .globl  sumstore<br>        .type   sumstore, @function<br><span class="hljs-symbol">sumstore:</span><br><span class="hljs-symbol">.LFB0:</span><br>        .cfi_startproc<br>        endbr64<br>        pushq   %rbx<br>        .cfi_def_cfa_offset <span class="hljs-number">16</span><br>        .cfi_offset <span class="hljs-number">3</span>, -<span class="hljs-number">16</span><br>        movq    %rdx, %rbx<br>        call    plus@PLT<br>        movq    %rax, (%rbx)<br>        popq    %rbx<br>        .cfi_def_cfa_offset <span class="hljs-number">8</span><br>        ret<br>        .cfi_endproc<br><span class="hljs-symbol">.LFE0:</span><br>        .size   sumstore, .-sumstore<br>        .ident  <span class="hljs-string">&quot;GCC: (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0&quot;</span><br>        <span class="hljs-meta">.section</span>        .note.GNU-stack,<span class="hljs-string">&quot;&quot;</span>,@progbits<br>        <span class="hljs-meta">.section</span>        .note.gnu.property,<span class="hljs-string">&quot;a&quot;</span><br>        <span class="hljs-meta">.align</span> <span class="hljs-number">8</span><br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">1</span>f - <span class="hljs-number">0</span>f<br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">4</span>f - <span class="hljs-number">1</span>f<br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">5</span><br><span class="hljs-number">0</span>:<br>        .string  <span class="hljs-string">&quot;GNU&quot;</span><br><span class="hljs-number">1</span>:<br>        <span class="hljs-meta">.align</span> <span class="hljs-number">8</span><br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">0xc0000002</span><br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">3</span>f - <span class="hljs-number">2</span>f<br><span class="hljs-number">2</span>:<br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">0x3</span><br><span class="hljs-number">3</span>:<br>        <span class="hljs-meta">.align</span> <span class="hljs-number">8</span><br><span class="hljs-number">4</span>:<br></code></pre></td></tr></table></figure>
+
+<p>精简一下：</p>
+<figure class="highlight mips"><figcaption><span>Assembly</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs MIPS"><span class="hljs-symbol">sumstore:</span><br>   pushq   %rbx<br>   movq    %rdx, %rbx<br>   call    plus<br>   movq    %rax, (%rbx)<br>   popq    %rbx<br>   ret<br></code></pre></td></tr></table></figure>
+
+<p>可以使用<code>objdump</code>对二进制文件进行反汇编</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs gams">objdump<br><br>View information about object <span class="hljs-keyword">files</span>.<br>More information: https:<span class="hljs-comment">//manned.org/objdump.</span><br><br>- <span class="hljs-keyword">Display</span> the <span class="hljs-keyword">file</span> header information:<br>  objdump -f <span class="hljs-keyword">binary</span><br><br>- <span class="hljs-keyword">Display</span> the dis-assembled output of executable sections:<br>  objdump -d <span class="hljs-keyword">binary</span><br><br>- <span class="hljs-keyword">Display</span> a complete <span class="hljs-keyword">binary</span> hex dump of <span class="hljs-keyword">all</span> sections:<br>  objdump -s <span class="hljs-keyword">binary</span><br></code></pre></td></tr></table></figure>
               
             </div>
             <hr/>
