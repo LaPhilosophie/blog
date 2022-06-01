@@ -16,26 +16,26 @@
   <meta name="author" content="郭佳明">
   <meta name="keywords" content="">
   
-    <meta name="description" content="函数调用栈栈的布局 由高地址向低地址增长 栈帧结构的两端由两个指针来指定 栈指针：%rsp，指向栈顶，地址更高 桢指针：%rbp，指向栈底，地址更低    出栈入栈 pushq Src 从Src取操作数 将%rsp减8 将操作数写到%rsp指向的地址   popq Dst 从%rsp中保存的地址值读取数值 将 %rsp加 8 将数值保存到Dst (必须是寄存器)    过程控制 A函数调用B函数">
+    <meta name="description" content="基础 学习 Bash 的基础知识 阅读man bash或者tldr bash 一些别的shell：zsh、fish 了解bash内置命令   文本编辑器 使用vim、EMACS在终端编辑文本   文档 man tldr apropos 使用help获取帮助信息   输入输出重定向 使用 &gt; 和 &lt; 来重定向输出和输入 使用 | 来重定向管道 &gt; 会覆盖了输出文件而 &gt;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CSAPP：程序的机器级表示-4">
-<meta property="og:url" content="http://gls.show/p/3754ea8a/index.html">
+<meta property="og:title" content="命令行的艺术">
+<meta property="og:url" content="http://gls.show/p/6aa1f673/index.html">
 <meta property="og:site_name" content="郭佳明的博客">
-<meta property="og:description" content="函数调用栈栈的布局 由高地址向低地址增长 栈帧结构的两端由两个指针来指定 栈指针：%rsp，指向栈顶，地址更高 桢指针：%rbp，指向栈底，地址更低    出栈入栈 pushq Src 从Src取操作数 将%rsp减8 将操作数写到%rsp指向的地址   popq Dst 从%rsp中保存的地址值读取数值 将 %rsp加 8 将数值保存到Dst (必须是寄存器)    过程控制 A函数调用B函数">
+<meta property="og:description" content="基础 学习 Bash 的基础知识 阅读man bash或者tldr bash 一些别的shell：zsh、fish 了解bash内置命令   文本编辑器 使用vim、EMACS在终端编辑文本   文档 man tldr apropos 使用help获取帮助信息   输入输出重定向 使用 &gt; 和 &lt; 来重定向输出和输入 使用 | 来重定向管道 &gt; 会覆盖了输出文件而 &gt;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://gls.show/image/csapp1.png">
-<meta property="article:published_time" content="2022-06-01T11:03:14.314Z">
-<meta property="article:modified_time" content="2022-06-01T13:43:15.780Z">
+<meta property="og:image" content="http://gls.show/image/1654102693071.png">
+<meta property="article:published_time" content="2022-06-01T14:31:43.505Z">
+<meta property="article:modified_time" content="2022-06-01T17:51:00.114Z">
 <meta property="article:author" content="郭佳明">
-<meta property="article:tag" content="操作系统，csapp">
+<meta property="article:tag" content="shell，Linux">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://gls.show/image/csapp1.png">
+<meta name="twitter:image" content="http://gls.show/image/1654102693071.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>CSAPP：程序的机器级表示-4 - 郭佳明的博客</title>
+  <title>命令行的艺术 - 郭佳明的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -186,7 +186,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="CSAPP：程序的机器级表示-4"></span>
+            <span id="subtitle" data-typed-text="命令行的艺术"></span>
           
         </div>
 
@@ -197,7 +197,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-01 19:03" pubdate>
+        <time datetime="2022-06-01 22:31" pubdate>
           2022年6月1日 晚上
         </time>
       </span>
@@ -210,7 +210,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          381 字
+          803 字
         
       </span>
     
@@ -222,7 +222,7 @@
         
         
           <!-- compatible with older versions-->
-          2 分钟
+          3 分钟
         
       </span>
     
@@ -268,70 +268,118 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">CSAPP：程序的机器级表示-4</h1>
+            <h1 style="display: none">命令行的艺术</h1>
             
               <p class="note note-info">
                 
                   
                     <!-- compatible with older versions-->
-                    本文最后更新于：2022年6月1日 晚上
+                    本文最后更新于：2022年6月2日 凌晨
                   
                 
               </p>
             
             <div class="markdown-body">
               
-              <h1 id="函数调用栈"><a href="#函数调用栈" class="headerlink" title="函数调用栈"></a>函数调用栈</h1><h2 id="栈的布局"><a href="#栈的布局" class="headerlink" title="栈的布局"></a>栈的布局</h2><ul>
-<li>由高地址向低地址增长</li>
-<li>栈帧结构的两端由两个指针来指定<ul>
-<li>栈指针：%rsp，指向栈顶，地址更高</li>
-<li>桢指针：%rbp，指向栈底，地址更低</li>
+              <p><img src="/image/1654102693071.png" srcset="/img/loading.gif" lazyload>  </p>
+<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><ul>
+<li>学习 Bash 的基础知识<ul>
+<li>阅读<code>man bash</code>或者<code>tldr bash</code></li>
+<li>一些别的shell：zsh、fish</li>
+<li>了解bash内置命令</li>
+</ul>
+</li>
+<li>文本编辑器<ul>
+<li>使用vim、EMACS在终端编辑文本</li>
+</ul>
+</li>
+<li>文档<ul>
+<li>man</li>
+<li>tldr</li>
+<li>apropos</li>
+<li>使用help获取帮助信息</li>
+</ul>
+</li>
+<li>输入输出重定向<ul>
+<li>使用 &gt; 和 &lt; 来重定向输出和输入</li>
+<li>使用 | 来重定向管道</li>
+<li>&gt; 会覆盖了输出文件而 &gt;&gt; 是在文件末添加</li>
+<li>标准输出 stdout </li>
+<li>标准错误 stderr</li>
+</ul>
+</li>
+<li>bash任务管理工具<ul>
+<li>&amp;：将任务放在后台执行</li>
+<li>ctrl+c：终止程序</li>
+<li>ctrl+z：挂起程序（配合fg、bg命令使用）</li>
+<li>ctrl+d：终止输入/退出终端</li>
+<li>ctrl-l：清屏</li>
+<li>jobs</li>
+</ul>
+</li>
+<li>ssh 进行远程命令行登录<ul>
+<li>无密码认证登录<ul>
+<li>eval $(ssh-agent)</li>
+<li>ssh-add ~/.ssh/私钥</li>
 </ul>
 </li>
 </ul>
-<h2 id="出栈入栈"><a href="#出栈入栈" class="headerlink" title="出栈入栈"></a>出栈入栈</h2><ul>
-<li>pushq Src<ul>
-<li>从Src取操作数</li>
-<li>将%rsp减8</li>
-<li>将操作数写到%rsp指向的地址</li>
-</ul>
 </li>
-<li>popq Dst<ul>
-<li>从%rsp中保存的地址值读取数值</li>
-<li>将 %rsp加 8</li>
-<li>将数值保存到Dst (必须是寄存器)</li>
+<li>文件管理工具<ul>
+<li>ls -l每一列的意义</li>
+<li>查看文件内容   <ul>
+<li>less</li>
+<li>tail</li>
+<li>head</li>
 </ul>
 </li>
 </ul>
-<h1 id="过程控制"><a href="#过程控制" class="headerlink" title="过程控制"></a>过程控制</h1><ul>
-<li>A函数调用B函数<ul>
-<li>A是调用过程</li>
-<li>B是被调用过程</li>
+</li>
+<li>基本的网络管理工具<ul>
+<li>ip</li>
+<li>ifconfig</li>
 </ul>
 </li>
-<li>返回地址入栈<ul>
-<li>返回地址（return address）是紧随call指令的下一条指令的地址</li>
+<li>版本控制系统<ul>
+<li>git</li>
 </ul>
 </li>
-<li>过程返回ret<ul>
-<li>从栈中弹出返回地址</li>
-<li>跳转到返回地址</li>
+<li>正则表达式<ul>
+<li>grep</li>
+<li>egrep</li>
+<li>熟悉上面命令的-i，-o，-v，-A，-B 和 -C参数</li>
 </ul>
 </li>
-<li>要注意理解%rsp、%rip的变化</li>
+<li>包管理工具<ul>
+<li>学会使用 apt-get，yum，dnf 或 pacman来查找和安装软件包</li>
+<li>pip 来安装基于 Python 的命令行工具</li>
 </ul>
-<h1 id="需要保存的几个状态"><a href="#需要保存的几个状态" class="headerlink" title="需要保存的几个状态"></a>需要保存的几个状态</h1><p>栈分配单位——帧，栈中单个过程实例的状态数据</p>
-<ul>
-<li>参数</li>
-<li>局部变量</li>
-<li>返回地址</li>
+</li>
 </ul>
-<hr>
-<ul>
-<li>call对应push操作（栈帧开辟）</li>
-<li>ret对应pop操作（栈帧回收）</li>
+<h1 id="日常使用"><a href="#日常使用" class="headerlink" title="日常使用"></a>日常使用</h1><ul>
+<li>Tab 键实现自动补全参数</li>
+<li>ctrl-r 搜索命令行历史记录<ul>
+<li>按下 Enter 键会执行当前匹配的命令</li>
+<li>按下右方向键会将匹配项放入当前行中，不会直接执行，以便做出修改</li>
 </ul>
-<p>这个地方还是要自己调试一遍程序，或者画一下过程图，分析一下地址和几个主要寄存器</p>
+</li>
+<li>命令修改<ul>
+<li>ctrl-w 删除你键入的最后一个单词</li>
+<li>ctrl-u 可以删除行内光标所在位置之前的内容</li>
+<li>alt-b 和 alt-f 可以以单词为单位移动光标</li>
+<li>ctrl-a 可以将光标移至行首</li>
+<li>ctrl-e 可以将光标移至行尾</li>
+<li>ctrl-k 可以删除光标至行尾的所有内容</li>
+<li>ctrl-l 可以清屏</li>
+<li>键入 man readline 可以查看 Bash 中的默认快捷键</li>
+</ul>
+</li>
+<li>pstree -p 以一种优雅的方式展示进程树</li>
+<li>回到前一个工作路径：cd -</li>
+<li>Alt . :上一个命令</li>
+<li>使用 pgrep 和 pkill 根据名字查找进程或发送信号</li>
+<li></li>
+</ul>
 
               
             </div>
@@ -349,7 +397,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/CSAPP/" class="category-chain-item">CSAPP</a>
+  <a href="/categories/shell/" class="category-chain-item">shell</a>
   
   
 
@@ -364,7 +412,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%EF%BC%8Ccsapp/">#操作系统，csapp</a>
+        <a href="/tags/shell%EF%BC%8CLinux/">#shell，Linux</a>
       
     </div>
   
@@ -376,8 +424,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>CSAPP：程序的机器级表示-4</div>
-      <div>http://gls.show/p/3754ea8a/</div>
+      <div>命令行的艺术</div>
+      <div>http://gls.show/p/6aa1f673/</div>
     </div>
     <div class="license-meta">
       
@@ -419,18 +467,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/p/6aa1f673/" title="命令行的艺术">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">命令行的艺术</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/p/6068f6cf/" title="鲁迅《热风》 四十一〔１〕">
-                        <span class="hidden-mobile">鲁迅《热风》 四十一〔１〕</span>
+                      <a href="/p/3754ea8a/" title="CSAPP：程序的机器级表示-4">
+                        <span class="hidden-mobile">CSAPP：程序的机器级表示-4</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

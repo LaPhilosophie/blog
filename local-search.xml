@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>命令行的艺术</title>
+    <link href="/p/6aa1f673/"/>
+    <url>/p/6aa1f673/</url>
+    
+    <content type="html"><![CDATA[<p><img src="/image/1654102693071.png">  </p><h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><ul><li>学习 Bash 的基础知识<ul><li>阅读<code>man bash</code>或者<code>tldr bash</code></li><li>一些别的shell：zsh、fish</li><li>了解bash内置命令</li></ul></li><li>文本编辑器<ul><li>使用vim、EMACS在终端编辑文本</li></ul></li><li>文档<ul><li>man</li><li>tldr</li><li>apropos</li><li>使用help获取帮助信息</li></ul></li><li>输入输出重定向<ul><li>使用 &gt; 和 &lt; 来重定向输出和输入</li><li>使用 | 来重定向管道</li><li>&gt; 会覆盖了输出文件而 &gt;&gt; 是在文件末添加</li><li>标准输出 stdout </li><li>标准错误 stderr</li></ul></li><li>bash任务管理工具<ul><li>&amp;：将任务放在后台执行</li><li>ctrl+c：终止程序</li><li>ctrl+z：挂起程序（配合fg、bg命令使用）</li><li>ctrl+d：终止输入/退出终端</li><li>ctrl-l：清屏</li><li>jobs</li></ul></li><li>ssh 进行远程命令行登录<ul><li>无密码认证登录<ul><li>eval $(ssh-agent)</li><li>ssh-add ~/.ssh/私钥</li></ul></li></ul></li><li>文件管理工具<ul><li>ls -l每一列的意义</li><li>查看文件内容   <ul><li>less</li><li>tail</li><li>head</li></ul></li></ul></li><li>基本的网络管理工具<ul><li>ip</li><li>ifconfig</li></ul></li><li>版本控制系统<ul><li>git</li></ul></li><li>正则表达式<ul><li>grep</li><li>egrep</li><li>熟悉上面命令的-i，-o，-v，-A，-B 和 -C参数</li></ul></li><li>包管理工具<ul><li>学会使用 apt-get，yum，dnf 或 pacman来查找和安装软件包</li><li>pip 来安装基于 Python 的命令行工具</li></ul></li></ul><h1 id="日常使用"><a href="#日常使用" class="headerlink" title="日常使用"></a>日常使用</h1><ul><li>Tab 键实现自动补全参数</li><li>ctrl-r 搜索命令行历史记录<ul><li>按下 Enter 键会执行当前匹配的命令</li><li>按下右方向键会将匹配项放入当前行中，不会直接执行，以便做出修改</li></ul></li><li>命令修改<ul><li>ctrl-w 删除你键入的最后一个单词</li><li>ctrl-u 可以删除行内光标所在位置之前的内容</li><li>alt-b 和 alt-f 可以以单词为单位移动光标</li><li>ctrl-a 可以将光标移至行首</li><li>ctrl-e 可以将光标移至行尾</li><li>ctrl-k 可以删除光标至行尾的所有内容</li><li>ctrl-l 可以清屏</li><li>键入 man readline 可以查看 Bash 中的默认快捷键</li></ul></li><li>pstree -p 以一种优雅的方式展示进程树</li><li>回到前一个工作路径：cd -</li><li>Alt . :上一个命令</li><li>使用 pgrep 和 pkill 根据名字查找进程或发送信号</li><li></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>shell</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>shell，Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>CSAPP：程序的机器级表示-4</title>
     <link href="/p/3754ea8a/"/>
     <url>/p/3754ea8a/</url>
@@ -261,11 +286,11 @@
   
   
   <entry>
-    <title>大厂算法hot100题计划</title>
+    <title>leetcode日常</title>
     <link href="/p/4d5648c6/"/>
     <url>/p/4d5648c6/</url>
     
-    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>由于最近实在是太闲了，因此制定了【大厂算法hot100题】计划，每天上班做一题leetcode，之后发布题解，然后再开始工作</p><p>刷题顺序参照<a href="https://codetop.cc/home">大厂面试频率</a>，由高到低依次进行</p><h1 id="大厂算法hot100题持续更新"><a href="#大厂算法hot100题持续更新" class="headerlink" title="大厂算法hot100题持续更新"></a>大厂算法hot100题持续更新</h1><table><thead><tr><th>原题</th><th>题解</th><th>算法标签</th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>]]></content>
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>由于最近实在是太闲了，因此制定了该计划，每天上班做一题leetcode，之后发布题解，然后再开始工作</p><p>刷题顺序一定程度上参照<a href="https://codetop.cc/home">大厂面试频率</a>，由高到低依次进行</p><h1 id="大厂算法hot100题持续更新"><a href="#大厂算法hot100题持续更新" class="headerlink" title="大厂算法hot100题持续更新"></a>大厂算法hot100题持续更新</h1><table><thead><tr><th>原题</th><th>题解</th><th>算法标签</th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>]]></content>
     
     
     <categories>
