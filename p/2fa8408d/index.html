@@ -16,26 +16,23 @@
   <meta name="author" content="郭佳明">
   <meta name="keywords" content="">
   
-    <meta name="description" content="思考两个问题：  控制结构相对应的机器语言的控制结构（汇编语言） C语言实现的分支、循环、开关等操作，在底层的机器语言是如何实现的？  条件码的隐式赋值几种标志寄存器 CF  进位标志位(Carry Flag, 无符号数) SF  符号标志识位(Sign Flag, 有符号数) ZF  零标志位 ( Zero Flag ) OF 溢出标志位( Overflow Flag , 有符号数)  add指">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CSAPP：程序的机器级表示-3">
-<meta property="og:url" content="http://gls.show/p/a9307f29/index.html">
+    <meta property="og:type" content="article">
+<meta property="og:title" content="汇编语言-1">
+<meta property="og:url" content="http://gls.show/p/2fa8408d/index.html">
 <meta property="og:site_name" content="郭佳明的博客">
-<meta property="og:description" content="思考两个问题：  控制结构相对应的机器语言的控制结构（汇编语言） C语言实现的分支、循环、开关等操作，在底层的机器语言是如何实现的？  条件码的隐式赋值几种标志寄存器 CF  进位标志位(Carry Flag, 无符号数) SF  符号标志识位(Sign Flag, 有符号数) ZF  零标志位 ( Zero Flag ) OF 溢出标志位( Overflow Flag , 有符号数)  add指">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://gls.show/image/csapp1.png">
-<meta property="article:published_time" content="2022-05-29T08:31:46.949Z">
-<meta property="article:modified_time" content="2022-06-01T11:03:17.147Z">
+<meta property="og:image" content="http://gls.show/image/assembly1.jpeg">
+<meta property="article:published_time" content="2022-05-23T18:30:01.706Z">
+<meta property="article:modified_time" content="2022-06-01T09:05:33.963Z">
 <meta property="article:author" content="郭佳明">
-<meta property="article:tag" content="操作系统，csapp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://gls.show/image/csapp1.png">
+<meta name="twitter:image" content="http://gls.show/image/assembly1.jpeg">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>CSAPP：程序的机器级表示-3 - 郭佳明的博客</title>
+  <title>汇编语言-1 - 郭佳明的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -186,7 +183,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="CSAPP：程序的机器级表示-3"></span>
+            <span id="subtitle" data-typed-text="汇编语言-1"></span>
           
         </div>
 
@@ -197,8 +194,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-05-29 16:31" pubdate>
-          2022年5月29日 下午
+        <time datetime="2022-05-24 02:30" pubdate>
+          2022年5月24日 凌晨
         </time>
       </span>
     
@@ -210,7 +207,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          2.1k 字
+          0 字
         
       </span>
     
@@ -222,7 +219,7 @@
         
         
           <!-- compatible with older versions-->
-          7 分钟
+          1 分钟
         
       </span>
     
@@ -268,135 +265,27 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">CSAPP：程序的机器级表示-3</h1>
+            <h1 style="display: none">汇编语言-1</h1>
             
               <p class="note note-info">
                 
                   
                     <!-- compatible with older versions-->
-                    本文最后更新于：2022年6月1日 晚上
+                    本文最后更新于：2022年6月1日 下午
                   
                 
               </p>
             
             <div class="markdown-body">
               
-              <p>思考两个问题：</p>
-<ul>
-<li>控制结构相对应的机器语言的控制结构（汇编语言）</li>
-<li>C语言实现的分支、循环、开关等操作，在底层的机器语言是如何实现的？</li>
-</ul>
-<h1 id="条件码的隐式赋值"><a href="#条件码的隐式赋值" class="headerlink" title="条件码的隐式赋值"></a>条件码的隐式赋值</h1><h2 id="几种标志寄存器"><a href="#几种标志寄存器" class="headerlink" title="几种标志寄存器"></a>几种标志寄存器</h2><ul>
-<li>CF  进位标志位(Carry Flag, 无符号数)</li>
-<li>SF  符号标志识位(Sign Flag, 有符号数)</li>
-<li>ZF  零标志位 ( Zero Flag )</li>
-<li>OF 溢出标志位( Overflow Flag , 有符号数)</li>
-</ul>
-<h2 id="add指令"><a href="#add指令" class="headerlink" title="add指令"></a>add指令</h2><p>addq Src,Dest 隐含了：t = a+b</p>
-<ul>
-<li>CF=1 <ul>
-<li>进位</li>
-<li>当两数相加产生进位/两数相减产生进位的情况下CF=1</li>
-<li>127+127、1-2</li>
-<li>把两个数当做无符号数，相加结果是否有进位？若有进位，则CF=1</li>
-</ul>
-</li>
-<li>ZF=1<ul>
-<li>运算结果为0</li>
-</ul>
-</li>
-<li>SF=1 <ul>
-<li>将t看做是有符号数，t&lt;0的情况下，SF=1</li>
-<li>运算结果可以看做是有符号数，也可以看做是无符号数，因此具有两种含义</li>
-<li>假设运算结果为10000001，可以看做是无符号数+129，也可以看做是有符号数-1</li>
-</ul>
-</li>
-<li>PF<ul>
-<li>奇偶标志位，如果运算结果的二进制表示中1的个数为偶数，PF=1，否则为0</li>
-</ul>
-</li>
-<li>OF=1<ul>
-<li>有符号数(补码)溢出的情况</li>
-<li>把两个数当做有符号数，相加结果是否有溢出？</li>
-<li>(a&gt;0 &amp;&amp; b&gt;0 &amp;&amp; t&lt;0) || (a&lt;0 &amp;&amp; b&lt;0 &amp;&amp; t&gt;=0)</li>
-</ul>
-</li>
-</ul>
-<h2 id="cmp"><a href="#cmp" class="headerlink" title="cmp"></a>cmp</h2><p>cmpq Src1, Src2会计算Src2-Src1的值并改写条件码，但是不会改变这两个操作数</p>
-<ul>
-<li>对标志寄存器值的判断依据与上面add指令相似</li>
-<li>t=Src2-Src1</li>
-</ul>
-<h2 id="跳转指令"><a href="#跳转指令" class="headerlink" title="跳转指令"></a>跳转指令</h2><p><img src="/image/assembly-cmp.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="C语言到汇编语言的转换"><a href="#C语言到汇编语言的转换" class="headerlink" title="C语言到汇编语言的转换"></a>C语言到汇编语言的转换</h1><h2 id="if-else-语句"><a href="#if-else-语句" class="headerlink" title="if else 语句"></a>if else 语句</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">absdiff</span> <span class="hljs-params">(<span class="hljs-keyword">long</span> x, <span class="hljs-keyword">long</span> y)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">long</span> result;<br>  <span class="hljs-keyword">if</span> (x &gt; y)<br>    result = x-y;<br>  <span class="hljs-keyword">else</span><br>    result = y-x;<br>  <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>转换为如下goto语句：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">absdiff_j</span><span class="hljs-params">(<span class="hljs-keyword">long</span> x, <span class="hljs-keyword">long</span> y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">long</span> result;<br>    <span class="hljs-keyword">int</span> ntest = x &lt;= y;<br>    <span class="hljs-keyword">if</span> (ntest) <span class="hljs-keyword">goto</span> Else;<br>    result = x-y;<br>    <span class="hljs-keyword">goto</span> Done;<br> Else:<br>    result = y-x;<br> Done:<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>转换为如下汇编：</p>
-<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs llvm"><span class="hljs-symbol">absdiff:</span><br>   cmpq    <span class="hljs-variable">%rsi</span><span class="hljs-punctuation">,</span> <span class="hljs-variable">%rdi</span>  # <span class="hljs-keyword">x</span>:y<br>   jle     .L<span class="hljs-number">4</span><br>   movq    <span class="hljs-variable">%rdi</span><span class="hljs-punctuation">,</span> <span class="hljs-variable">%rax</span><br>   subq    <span class="hljs-variable">%rsi</span><span class="hljs-punctuation">,</span> <span class="hljs-variable">%rax</span><br>   <span class="hljs-keyword">ret</span><br>.L<span class="hljs-number">4</span>:       # <span class="hljs-keyword">x</span> &lt;<span class="hljs-operator">=</span> y<br>   movq    <span class="hljs-variable">%rsi</span><span class="hljs-punctuation">,</span> <span class="hljs-variable">%rax</span><br>   subq    <span class="hljs-variable">%rdi</span><span class="hljs-punctuation">,</span> <span class="hljs-variable">%rax</span><br>   <span class="hljs-keyword">ret</span><br></code></pre></td></tr></table></figure>
-
-<p>对于三目运算符</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">val = Test ? Then_Expr : Else_Expr;<br></code></pre></td></tr></table></figure>
-<p>也可表示为ifelse语句，从而改写为汇编语句</p>
-<h2 id="循环结构"><a href="#循环结构" class="headerlink" title="循环结构"></a>循环结构</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">pcount_do</span><span class="hljs-params">(<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> x)</span> </span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">long</span> result = <span class="hljs-number">0</span>;<br>  <span class="hljs-keyword">do</span> &#123;<br>    result += x &amp; <span class="hljs-number">0x1</span>;<br>    x &gt;&gt;= <span class="hljs-number">1</span>;<br>  &#125; <span class="hljs-keyword">while</span> (x);<br>  <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ul>
-<li>计算x的二进制表示中有多少个1</li>
-</ul>
-<p>转化为goto语句：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">pcount_goto</span> <span class="hljs-params">(<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> x)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">long</span> result = <span class="hljs-number">0</span>;<br> loop:<br>  result += x &amp; <span class="hljs-number">0x1</span>;<br>  x &gt;&gt;= <span class="hljs-number">1</span>;<br>  <span class="hljs-keyword">if</span>(x) <span class="hljs-keyword">goto</span> loop;<br>  <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>转换为如下汇编：</p>
-<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mel"> movl  $0, %eax	<br>.L2:			<br>   movq  %rdi, %rdx	 存储result<br>   andl  $1,   %edx	 按位与<br>   addq  %rdx, %rax	 rax是返回值<br>   shrq  %rdi	     右移一位<br>   jne   .L2	     跳转<br>   rep; ret<br></code></pre></td></tr></table></figure>
-<p>for循环转化为while的通用版本：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">for</span> (Init; Test; Update )<br>    Body<br>---<br><br>Init;<br><span class="hljs-keyword">while</span> (Test ) &#123;<br>    Body<br>    Update;<br>&#125;<br></code></pre></td></tr></table></figure>
-<blockquote>
-<p>do-while循环与while循环相似。两者唯一的分别：do-while循环将先会执行一次循环内的代码，再去判断循环条件。所以无论循环条件是否满足，do-while循环内的代码至少会执行一次。因此，do-while循环属于后测循环(post-test loop)。</p>
-</blockquote>
-<p>do-while循环转化为goto的通用版本：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">do</span> </span><br><span class="hljs-function">  Body</span><br><span class="hljs-function"><span class="hljs-title">while</span> <span class="hljs-params">(Test)</span></span>;<br><br>---<br><br>loop:<br>   <span class="hljs-function">Body</span><br><span class="hljs-function">   <span class="hljs-title">if</span> <span class="hljs-params">(Test)</span></span><br><span class="hljs-function">      <span class="hljs-keyword">goto</span> loop</span><br></code></pre></td></tr></table></figure>
-<h2 id="switch结构"><a href="#switch结构" class="headerlink" title="switch结构"></a>switch结构</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">switch</span>(x) &#123;<br>  <span class="hljs-keyword">case</span> val_0:<br>    Block <span class="hljs-number">0</span><br>  <span class="hljs-keyword">case</span> val_1:<br>    Block <span class="hljs-number">1</span><br>    • • •<br>  <span class="hljs-keyword">case</span> val_n<span class="hljs-number">-1</span>:<br>    Block n–<span class="hljs-number">1</span><br>&#125;<br></code></pre></td></tr></table></figure>
-
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-string">.section</span>	<span class="hljs-string">.rodata</span><br>	<span class="hljs-string">.align</span> 8<br><span class="hljs-string">.L4</span>:<br>	<span class="hljs-string">.quad</span>	<span class="hljs-string">.L8</span>	<span class="hljs-comment"># x = 0</span><br>	<span class="hljs-string">.quad</span>	<span class="hljs-string">.L3</span>	<span class="hljs-comment"># x = 1</span><br>	<span class="hljs-string">.quad</span>	<span class="hljs-string">.L5</span>	<span class="hljs-comment"># x = 2</span><br>	<span class="hljs-string">.quad</span>	<span class="hljs-string">.L9</span>	<span class="hljs-comment"># x = 3</span><br>	<span class="hljs-string">.quad</span>	<span class="hljs-string">.L8</span>	<span class="hljs-comment"># x = 4</span><br>	<span class="hljs-string">.quad</span>	<span class="hljs-string">.L7</span>	<span class="hljs-comment"># x = 5</span><br>	<span class="hljs-string">.quad</span>	<span class="hljs-string">.L7</span>	<span class="hljs-comment"># x = 6</span><br></code></pre></td></tr></table></figure>
-
-<ul>
-<li>jmp到跳转表</li>
-<li>跳转表是一个数组，存储了不同case入口处的地址</li>
-<li>由于每个存储地址的指针是8个字节，因此比例因子为8</li>
-<li>基址为.L4，跳转的x存储在%rdi，则需要跳转到.L4 + x*8处，也即是jmp *.L4(,%rdi,8)</li>
-</ul>
-
+              <p><img src="/image/assembly1.jpeg" srcset="/img/loading.gif" lazyload></p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1>
               
             </div>
             <hr/>
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/CSAPP/" class="category-chain-item">CSAPP</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%EF%BC%8Ccsapp/">#操作系统，csapp</a>
-      
-    </div>
   
 </div>
 
@@ -406,8 +295,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>CSAPP：程序的机器级表示-3</div>
-      <div>http://gls.show/p/a9307f29/</div>
+      <div>汇编语言-1</div>
+      <div>http://gls.show/p/2fa8408d/</div>
     </div>
     <div class="license-meta">
       
@@ -419,7 +308,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年5月29日</div>
+          <div>2022年5月24日</div>
         </div>
       
       
@@ -444,29 +333,6 @@
 
 
 
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/p/6068f6cf/" title="鲁迅《热风》 四十一〔１〕">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">鲁迅《热风》 四十一〔１〕</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/p/de374fbf/" title="CSAPP：程序的机器级表示-2">
-                        <span class="hidden-mobile">CSAPP：程序的机器级表示-2</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
               
             </div>
 
