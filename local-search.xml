@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>CSAPP：程序的机器级表示-3</title>
+    <link href="/p/a9307f29/"/>
+    <url>/p/a9307f29/</url>
+    
+    <content type="html"><![CDATA[<p>思考两个问题：</p><ul><li>控制结构相对应的机器语言的控制结构（汇编语言）</li><li>C语言实现的分支、循环、开关等操作，在底层的机器语言是如何实现的？</li></ul><h1 id="条件码的隐式赋值"><a href="#条件码的隐式赋值" class="headerlink" title="条件码的隐式赋值"></a>条件码的隐式赋值</h1><h2 id="几种标志寄存器"><a href="#几种标志寄存器" class="headerlink" title="几种标志寄存器"></a>几种标志寄存器</h2><ul><li>CF  进位标志位(Carry Flag, 无符号数)</li><li>SF  符号标志识位(Sign Flag, 有符号数)</li><li>ZF  零标志位 ( Zero Flag )</li><li>OF 溢出标志位( Overflow Flag , 有符号数)</li></ul><h2 id="add指令"><a href="#add指令" class="headerlink" title="add指令"></a>add指令</h2><p>addq Src,Dest 隐含了：t = a+b</p><ul><li>CF=1 <ul><li>进位</li><li>当两数相加产生进位/两数相减产生进位的情况下CF=1</li><li>127+127、1-2</li><li>把两个数当做无符号数，相加结果是否有进位？若有进位，则CF=1</li></ul></li><li>ZF=1<ul><li>运算结果为0</li></ul></li><li>SF=1 <ul><li>将t看做是有符号数，t&lt;0的情况下，SF=1</li><li>运算结果可以看做是有符号数，也可以看做是无符号数，因此具有两种含义</li><li>假设运算结果为10000001，可以看做是无符号数+129，也可以看做是有符号数-1</li></ul></li><li>PF<ul><li>奇偶标志位，如果运算结果的二进制表示中1的个数为偶数，PF=1，否则为0</li></ul></li><li>OF=1<ul><li>有符号数(补码)溢出的情况</li><li>把两个数当做有符号数，相加结果是否有溢出？</li><li>(a&gt;0 &amp;&amp; b&gt;0 &amp;&amp; t&lt;0) || (a&lt;0 &amp;&amp; b&lt;0 &amp;&amp; t&gt;=0)</li></ul></li></ul><h2 id="cmp"><a href="#cmp" class="headerlink" title="cmp"></a>cmp</h2><p>cmpq Src1, Src2会计算Src2-Src1的值并改写条件码，但是不会改变这两个操作数</p><ul><li>对标志寄存器值的判断依据与上面add指令相似，t=Src2-Src1</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>CSAPP</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>操作系统，csapp</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>CSAPP：程序的机器级表示-2</title>
     <link href="/p/de374fbf/"/>
     <url>/p/de374fbf/</url>

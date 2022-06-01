@@ -16,16 +16,16 @@
   <meta name="author" content="郭佳明">
   <meta name="keywords" content="">
   
-    <meta name="description" content="程序员视角 程序计数器(Program counter，PC ) CS：IP EIP RIP   寄存器（Register） 条件码(Condition codes) 存储最近的算术或逻辑运算的状态信息 用于条件分支   内存(Memory) 可按字节寻址的数组（内存就是个大数组） 程序和数据 栈(Stack，用于函数调用过程的实现)    几种常见的寻址方式寄存器间接寻址1movq (%rcx)">
+    <meta name="description" content="思考两个问题：  控制结构相对应的机器语言的控制结构（汇编语言） C语言实现的分支、循环、开关等操作，在底层的机器语言是如何实现的？  条件码的隐式赋值几种标志寄存器 CF  进位标志位(Carry Flag, 无符号数) SF  符号标志识位(Sign Flag, 有符号数) ZF  零标志位 ( Zero Flag ) OF 溢出标志位( Overflow Flag , 有符号数)  add指">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CSAPP：程序的机器级表示-2">
-<meta property="og:url" content="http://gls.show/p/de374fbf/index.html">
+<meta property="og:title" content="CSAPP：程序的机器级表示-3">
+<meta property="og:url" content="http://gls.show/p/a9307f29/index.html">
 <meta property="og:site_name" content="郭佳明的博客">
-<meta property="og:description" content="程序员视角 程序计数器(Program counter，PC ) CS：IP EIP RIP   寄存器（Register） 条件码(Condition codes) 存储最近的算术或逻辑运算的状态信息 用于条件分支   内存(Memory) 可按字节寻址的数组（内存就是个大数组） 程序和数据 栈(Stack，用于函数调用过程的实现)    几种常见的寻址方式寄存器间接寻址1movq (%rcx)">
+<meta property="og:description" content="思考两个问题：  控制结构相对应的机器语言的控制结构（汇编语言） C语言实现的分支、循环、开关等操作，在底层的机器语言是如何实现的？  条件码的隐式赋值几种标志寄存器 CF  进位标志位(Carry Flag, 无符号数) SF  符号标志识位(Sign Flag, 有符号数) ZF  零标志位 ( Zero Flag ) OF 溢出标志位( Overflow Flag , 有符号数)  add指">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://gls.show/image/csapp1.png">
-<meta property="article:published_time" content="2022-05-28T10:06:50.371Z">
-<meta property="article:modified_time" content="2022-05-28T19:03:26.581Z">
+<meta property="article:published_time" content="2022-05-29T08:31:46.949Z">
+<meta property="article:modified_time" content="2022-05-30T13:32:22.882Z">
 <meta property="article:author" content="郭佳明">
 <meta property="article:tag" content="操作系统，csapp">
 <meta name="twitter:card" content="summary_large_image">
@@ -35,7 +35,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>CSAPP：程序的机器级表示-2 - 郭佳明的博客</title>
+  <title>CSAPP：程序的机器级表示-3 - 郭佳明的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -186,7 +186,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="CSAPP：程序的机器级表示-2"></span>
+            <span id="subtitle" data-typed-text="CSAPP：程序的机器级表示-3"></span>
           
         </div>
 
@@ -197,8 +197,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-05-28 18:06" pubdate>
-          2022年5月28日 晚上
+        <time datetime="2022-05-29 16:31" pubdate>
+          2022年5月29日 下午
         </time>
       </span>
     
@@ -210,7 +210,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          1.9k 字
+          622 字
         
       </span>
     
@@ -222,7 +222,7 @@
         
         
           <!-- compatible with older versions-->
-          6 分钟
+          2 分钟
         
       </span>
     
@@ -268,96 +268,65 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">CSAPP：程序的机器级表示-2</h1>
+            <h1 style="display: none">CSAPP：程序的机器级表示-3</h1>
             
               <p class="note note-info">
                 
                   
                     <!-- compatible with older versions-->
-                    本文最后更新于：2022年5月29日 凌晨
+                    本文最后更新于：2022年5月30日 晚上
                   
                 
               </p>
             
             <div class="markdown-body">
               
-              <h1 id="程序员视角"><a href="#程序员视角" class="headerlink" title="程序员视角"></a>程序员视角</h1><ul>
-<li>程序计数器(Program counter，PC )<ul>
-<li>CS：IP</li>
-<li>EIP</li>
-<li>RIP</li>
+              <p>思考两个问题：</p>
+<ul>
+<li>控制结构相对应的机器语言的控制结构（汇编语言）</li>
+<li>C语言实现的分支、循环、开关等操作，在底层的机器语言是如何实现的？</li>
+</ul>
+<h1 id="条件码的隐式赋值"><a href="#条件码的隐式赋值" class="headerlink" title="条件码的隐式赋值"></a>条件码的隐式赋值</h1><h2 id="几种标志寄存器"><a href="#几种标志寄存器" class="headerlink" title="几种标志寄存器"></a>几种标志寄存器</h2><ul>
+<li>CF  进位标志位(Carry Flag, 无符号数)</li>
+<li>SF  符号标志识位(Sign Flag, 有符号数)</li>
+<li>ZF  零标志位 ( Zero Flag )</li>
+<li>OF 溢出标志位( Overflow Flag , 有符号数)</li>
+</ul>
+<h2 id="add指令"><a href="#add指令" class="headerlink" title="add指令"></a>add指令</h2><p>addq Src,Dest 隐含了：t = a+b</p>
+<ul>
+<li>CF=1 <ul>
+<li>进位</li>
+<li>当两数相加产生进位/两数相减产生进位的情况下CF=1</li>
+<li>127+127、1-2</li>
+<li>把两个数当做无符号数，相加结果是否有进位？若有进位，则CF=1</li>
 </ul>
 </li>
-<li>寄存器（Register）</li>
-<li>条件码(Condition codes)<ul>
-<li>存储最近的算术或逻辑运算的状态信息</li>
-<li>用于条件分支</li>
+<li>ZF=1<ul>
+<li>运算结果为0</li>
 </ul>
 </li>
-<li>内存(Memory)<ul>
-<li>可按字节寻址的数组（内存就是个大数组）</li>
-<li>程序和数据</li>
-<li>栈(Stack，用于函数调用过程的实现)</li>
+<li>SF=1 <ul>
+<li>将t看做是有符号数，t&lt;0的情况下，SF=1</li>
+<li>运算结果可以看做是有符号数，也可以看做是无符号数，因此具有两种含义</li>
+<li>假设运算结果为10000001，可以看做是无符号数+129，也可以看做是有符号数-1</li>
+</ul>
+</li>
+<li>PF<ul>
+<li>奇偶标志位，如果运算结果的二进制表示中1的个数为偶数，PF=1，否则为0</li>
+</ul>
+</li>
+<li>OF=1<ul>
+<li>有符号数(补码)溢出的情况</li>
+<li>把两个数当做有符号数，相加结果是否有溢出？</li>
+<li>(a&gt;0 &amp;&amp; b&gt;0 &amp;&amp; t&lt;0) || (a&lt;0 &amp;&amp; b&lt;0 &amp;&amp; t&gt;=0)</li>
 </ul>
 </li>
 </ul>
-<h1 id="几种常见的寻址方式"><a href="#几种常见的寻址方式" class="headerlink" title="几种常见的寻址方式"></a>几种常见的寻址方式</h1><h2 id="寄存器间接寻址"><a href="#寄存器间接寻址" class="headerlink" title="寄存器间接寻址"></a>寄存器间接寻址</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs log">movq (%rcx),%rax<br></code></pre></td></tr></table></figure>
-<p>寄存器R指定内存地址</p>
+<h2 id="cmp"><a href="#cmp" class="headerlink" title="cmp"></a>cmp</h2><p>cmpq Src1, Src2会计算Src2-Src1的值并改写条件码，但是不会改变这两个操作数</p>
 <ul>
-<li>Mem[Reg[R]]</li>
-<li>(%rax)</li>
+<li>对标志寄存器值的判断依据与上面add指令相似，t=Src2-Src1</li>
 </ul>
-<h2 id="相对寻址"><a href="#相对寻址" class="headerlink" title="相对寻址"></a>相对寻址</h2><figure class="highlight arm"><figcaption><span>Assembly</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ARM"><span class="hljs-symbol">movq</span> <span class="hljs-number">8</span>(%rbp),%rdx<br></code></pre></td></tr></table></figure>
-<ul>
-<li>寄存器R指定内存区域的开始地址，需配合偏移地址</li>
-<li>形式：D(R) 含义：Mem[Reg[R]+D]  D为1/2/4/8</li>
-</ul>
-<h2 id="完整的内存寻址模式"><a href="#完整的内存寻址模式" class="headerlink" title="完整的内存寻址模式"></a>完整的内存寻址模式</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs log">Mem[Reg[Rb]+S*Reg[Ri]]<br></code></pre></td></tr></table></figure>
 
-<ul>
-<li>D(Rb,Ri,S) </li>
-<li>Mem[Reg[Rb]+S*Reg[Ri]+ D]</li>
-</ul>
-<blockquote>
-<p>(Rb,Ri)    Mem[Reg[Rb]+Reg[Ri]]<br>        D(Rb,Ri)    Mem[Reg[Rb]+Reg[Ri]+D]<br>        (Rb,Ri,S)    Mem[Reg[Rb]+S*Reg[Ri]]</p>
-</blockquote>
-<h1 id="mov对应的C语言语句"><a href="#mov对应的C语言语句" class="headerlink" title="mov对应的C语言语句"></a>mov对应的C语言语句</h1><p>movq $0x4,%rax </p>
-<ul>
-<li>temp = 0x4;</li>
-</ul>
-<p>movq $-147,  (%rax)</p>
-<ul>
-<li>*p = -147;</li>
-</ul>
-<p>movq %rax,   %rdx</p>
-<ul>
-<li>temp2 = temp1</li>
-</ul>
-<p>movq %rax,   (%rdx)</p>
-<ul>
-<li>*p = temp;</li>
-</ul>
-<p>movq (%rax), %rdx</p>
-<ul>
-<li>temp = *p;</li>
-</ul>
-<h1 id="swap函数"><a href="#swap函数" class="headerlink" title="swap函数"></a>swap函数</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">swap</span></span><br><span class="hljs-function">   <span class="hljs-params">(<span class="hljs-keyword">long</span> *xp, <span class="hljs-keyword">long</span> *yp)</span> </span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-keyword">long</span> t0 = *xp;<br>  <span class="hljs-keyword">long</span> t1 = *yp;<br>  *xp = t1;<br>  *yp = t0;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>对应汇编：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs log">swap:<br>   movq    (%rdi), %rax  # t0 = *xp  <br>   movq    (%rsi), %rdx  # t1 = *yp<br>   movq    %rdx, (%rdi)  # *xp = t1<br>   movq    %rax, (%rsi)  # *yp = t0<br>   ret<br></code></pre></td></tr></table></figure>
-
-<h1 id="C语言程序与汇编的转换"><a href="#C语言程序与汇编的转换" class="headerlink" title="C语言程序与汇编的转换"></a>C语言程序与汇编的转换</h1><p>C语言程序：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">plus</span><span class="hljs-params">(<span class="hljs-keyword">long</span> x, <span class="hljs-keyword">long</span> y)</span></span>; <br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sumstore</span><span class="hljs-params">(<span class="hljs-keyword">long</span> x, <span class="hljs-keyword">long</span> y, </span></span><br><span class="hljs-params"><span class="hljs-function">                          <span class="hljs-keyword">long</span> *dest)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">long</span> t = plus(x, y);<br>    *dest = t;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">gcc –Og –S sum.c<br></code></pre></td></tr></table></figure>
-
-<p>生成的汇编：</p>
-<figure class="highlight mips"><figcaption><span>Assembly</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs MIPS">        .file   <span class="hljs-string">&quot;fk.c&quot;</span><br>        <span class="hljs-meta">.text</span><br>        .globl  sumstore<br>        .type   sumstore, @function<br><span class="hljs-symbol">sumstore:</span><br><span class="hljs-symbol">.LFB0:</span><br>        .cfi_startproc<br>        endbr64<br>        pushq   %rbx<br>        .cfi_def_cfa_offset <span class="hljs-number">16</span><br>        .cfi_offset <span class="hljs-number">3</span>, -<span class="hljs-number">16</span><br>        movq    %rdx, %rbx<br>        call    plus@PLT<br>        movq    %rax, (%rbx)<br>        popq    %rbx<br>        .cfi_def_cfa_offset <span class="hljs-number">8</span><br>        ret<br>        .cfi_endproc<br><span class="hljs-symbol">.LFE0:</span><br>        .size   sumstore, .-sumstore<br>        .ident  <span class="hljs-string">&quot;GCC: (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0&quot;</span><br>        <span class="hljs-meta">.section</span>        .note.GNU-stack,<span class="hljs-string">&quot;&quot;</span>,@progbits<br>        <span class="hljs-meta">.section</span>        .note.gnu.property,<span class="hljs-string">&quot;a&quot;</span><br>        <span class="hljs-meta">.align</span> <span class="hljs-number">8</span><br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">1</span>f - <span class="hljs-number">0</span>f<br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">4</span>f - <span class="hljs-number">1</span>f<br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">5</span><br><span class="hljs-number">0</span>:<br>        .string  <span class="hljs-string">&quot;GNU&quot;</span><br><span class="hljs-number">1</span>:<br>        <span class="hljs-meta">.align</span> <span class="hljs-number">8</span><br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">0xc0000002</span><br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">3</span>f - <span class="hljs-number">2</span>f<br><span class="hljs-number">2</span>:<br>        <span class="hljs-meta">.long</span>    <span class="hljs-number">0x3</span><br><span class="hljs-number">3</span>:<br>        <span class="hljs-meta">.align</span> <span class="hljs-number">8</span><br><span class="hljs-number">4</span>:<br></code></pre></td></tr></table></figure>
-
-<p>精简一下：</p>
-<figure class="highlight mips"><figcaption><span>Assembly</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs MIPS"><span class="hljs-symbol">sumstore:</span><br>   pushq   %rbx<br>   movq    %rdx, %rbx<br>   call    plus<br>   movq    %rax, (%rbx)<br>   popq    %rbx<br>   ret<br></code></pre></td></tr></table></figure>
-
-<p>可以使用<code>objdump</code>对二进制文件进行反汇编</p>
-<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs gams">objdump<br><br>View information about object <span class="hljs-keyword">files</span>.<br>More information: https:<span class="hljs-comment">//manned.org/objdump.</span><br><br>- <span class="hljs-keyword">Display</span> the <span class="hljs-keyword">file</span> header information:<br>  objdump -f <span class="hljs-keyword">binary</span><br><br>- <span class="hljs-keyword">Display</span> the dis-assembled output of executable sections:<br>  objdump -d <span class="hljs-keyword">binary</span><br><br>- <span class="hljs-keyword">Display</span> a complete <span class="hljs-keyword">binary</span> hex dump of <span class="hljs-keyword">all</span> sections:<br>  objdump -s <span class="hljs-keyword">binary</span><br></code></pre></td></tr></table></figure>
               
             </div>
             <hr/>
@@ -401,8 +370,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>CSAPP：程序的机器级表示-2</div>
-      <div>http://gls.show/p/de374fbf/</div>
+      <div>CSAPP：程序的机器级表示-3</div>
+      <div>http://gls.show/p/a9307f29/</div>
     </div>
     <div class="license-meta">
       
@@ -414,7 +383,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年5月28日</div>
+          <div>2022年5月29日</div>
         </div>
       
       
@@ -444,18 +413,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/p/a9307f29/" title="CSAPP：程序的机器级表示-3">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CSAPP：程序的机器级表示-3</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/p/3bf4a27/" title="CSAPP：程序的机器级表示-1">
-                        <span class="hidden-mobile">CSAPP：程序的机器级表示-1</span>
+                      <a href="/p/de374fbf/" title="CSAPP：程序的机器级表示-2">
+                        <span class="hidden-mobile">CSAPP：程序的机器级表示-2</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
