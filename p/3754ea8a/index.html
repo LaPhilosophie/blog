@@ -16,25 +16,26 @@
   <meta name="author" content="郭佳明">
   <meta name="keywords" content="">
   
-    <meta name="description" content="鲁迅《热风》 四十一〔１〕从一封匿名信里看见一句话，是“数麻石片”（原注江苏方言），大约是没有本领便不必提倡改革，不如去数石片的好的意思。因此又记起了本志通信栏内所载四川方言的“洗煤炭”〔２〕。想来别省方言中，相类的话还多；守着这专劝人自暴自弃的格言的人，也怕并不少。 凡中国人说一句话，做一件事，倘与传来的积习有若干抵触，须一个斤斗便告成功，才有立足的处所；而且被恭维得烙铁一般热。否则免不了标新立">
+    <meta name="description" content="函数调用栈栈的布局 由高地址向低地址增长 栈帧结构的两端由两个指针来指定 栈指针：%rsp，指向栈顶，地址更高 桢指针：%rbp，指向栈底，地址更低    出栈入栈 pushq Src 从Src取操作数 将%rsp减8 将操作数写到%rsp指向的地址   popq Dst 从%rsp中保存的地址值读取数值 将 %rsp加 8 将数值保存到Dst (必须是寄存器)    过程控制 A函数调用B函数">
 <meta property="og:type" content="article">
-<meta property="og:title" content="鲁迅《热风》 四十一〔１〕">
-<meta property="og:url" content="http://gls.show/p/6068f6cf/index.html">
+<meta property="og:title" content="CSAPP：程序的机器级表示-4">
+<meta property="og:url" content="http://gls.show/p/3754ea8a/index.html">
 <meta property="og:site_name" content="郭佳明的博客">
-<meta property="og:description" content="鲁迅《热风》 四十一〔１〕从一封匿名信里看见一句话，是“数麻石片”（原注江苏方言），大约是没有本领便不必提倡改革，不如去数石片的好的意思。因此又记起了本志通信栏内所载四川方言的“洗煤炭”〔２〕。想来别省方言中，相类的话还多；守着这专劝人自暴自弃的格言的人，也怕并不少。 凡中国人说一句话，做一件事，倘与传来的积习有若干抵触，须一个斤斗便告成功，才有立足的处所；而且被恭维得烙铁一般热。否则免不了标新立">
+<meta property="og:description" content="函数调用栈栈的布局 由高地址向低地址增长 栈帧结构的两端由两个指针来指定 栈指针：%rsp，指向栈顶，地址更高 桢指针：%rbp，指向栈底，地址更低    出栈入栈 pushq Src 从Src取操作数 将%rsp减8 将操作数写到%rsp指向的地址   popq Dst 从%rsp中保存的地址值读取数值 将 %rsp加 8 将数值保存到Dst (必须是寄存器)    过程控制 A函数调用B函数">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://gls.show/image/luxun1.png">
-<meta property="article:published_time" content="2022-06-01T08:32:11.970Z">
-<meta property="article:modified_time" content="2022-06-01T11:03:28.092Z">
+<meta property="og:image" content="http://gls.show/image/csapp1.png">
+<meta property="article:published_time" content="2022-06-01T11:03:14.314Z">
+<meta property="article:modified_time" content="2022-06-01T13:43:01.235Z">
 <meta property="article:author" content="郭佳明">
+<meta property="article:tag" content="操作系统，csapp">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://gls.show/image/luxun1.png">
+<meta name="twitter:image" content="http://gls.show/image/csapp1.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>鲁迅《热风》 四十一〔１〕 - 郭佳明的博客</title>
+  <title>CSAPP：程序的机器级表示-4 - 郭佳明的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -185,7 +186,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="鲁迅《热风》 四十一〔１〕"></span>
+            <span id="subtitle" data-typed-text="CSAPP：程序的机器级表示-4"></span>
           
         </div>
 
@@ -196,8 +197,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-01 16:32" pubdate>
-          2022年6月1日 下午
+        <time datetime="2022-06-01 19:03" pubdate>
+          2022年6月1日 晚上
         </time>
       </span>
     
@@ -209,7 +210,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          1.4k 字
+          381 字
         
       </span>
     
@@ -221,7 +222,7 @@
         
         
           <!-- compatible with older versions-->
-          5 分钟
+          2 分钟
         
       </span>
     
@@ -267,7 +268,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">鲁迅《热风》 四十一〔１〕</h1>
+            <h1 style="display: none">CSAPP：程序的机器级表示-4</h1>
             
               <p class="note note-info">
                 
@@ -280,22 +281,57 @@
             
             <div class="markdown-body">
               
-              <h1 id="鲁迅《热风》-四十一〔１〕"><a href="#鲁迅《热风》-四十一〔１〕" class="headerlink" title="鲁迅《热风》 四十一〔１〕"></a>鲁迅《热风》 四十一〔１〕</h1><p>从一封匿名信里看见一句话，是“数麻石片”（原注江苏方言），大约是没有本领便不必提倡改革，不如去数石片的好的意思。因此又记起了本志通信栏内所载四川方言的“洗煤炭”〔２〕。想来别省方言中，相类的话还多；守着这专劝人自暴自弃的格言的人，也怕并<br>不少。</p>
-<p>凡中国人说一句话，做一件事，倘与传来的积习有若干抵触，须一个斤斗便告成功，才有立足的处所；而且被恭维得烙铁一般热。否则免不了标新立异的罪名，不许说话；或者竟成了大逆不道，为天地所不容。这一种人，从前本可以夷到九族〔３〕，连累邻居；现在却不过是几封匿名信罢了。但意志略略薄弱的人便不免因此萎缩，不知不觉的也入了“数麻石片”党。</p>
-<p>所以现在的中国，社会上毫无改革，学术上没有发明，美术上也没有创作；至于多人继续的研究，前仆后继的探险，那更不必提了。国人的事业，大抵是专谋时式的成功的经营，以及对于一切的冷笑。</p>
-<p>但冷笑的人，虽然反对改革，却又未必有保守的能力：即如文字一面，白话固然看不上眼，古文也不甚提得起笔。照他的学说，本该去“数麻石片”了；他却又不然，只是莫名其妙的冷笑。</p>
-<p>中国的人，大抵在如此空气里成功，在如此空气里萎缩腐败，以至老死。</p>
-<p>我想，人猿同源的学说，大约可以毫无疑义了。但我不懂，何以从前的古猴子，不都努力变人，却到现在还留着子孙，变把戏给人看。还是那时竟没有一匹想站起来学说人话呢？还是虽然有了几匹，却终被猴子社会攻击他标新立异，都咬死了；所以终于不能进化呢？</p>
-<p>尼采〔４〕式的超人，虽然太觉渺茫，但就世界现有人种的事实看来，却可以确信将来总有尤为高尚尤近圆满的人类出现。到那时候，类人猿上面，怕要添出“类猿人”这一个名词。</p>
-<p>所以我时常害怕，愿中国青年都摆脱冷气，只是向上走，不必听自暴自弃者流的话。能做事的做事，能发声的发声。有一分热，发一分光，就令萤火一般，也可以在黑暗里发一点光，不必等候炬火。</p>
-<p>此后如竟没有炬火：我便是唯一的光。倘若有了炬火，出了太阳，我们自然心悦诚服的消失，不但毫无不平，而且还要随喜〔５〕赞美这炬火或太阳；因为他照了人类，连我都在内。</p>
-<p>我又愿中国青年都只是向上走，不必理会这冷笑和暗箭。</p>
-<p>尼采说：</p>
-<blockquote>
-<p>“真的，人是一个浊流。应该是海了，能容这浊流使他干净。<br>“咄，我教你们超人：这便是海，在他这里，能容下你们的大侮蔑。”<br>（《札拉图如是说》的《序言》第三节）</p>
-</blockquote>
-<p>纵令不过一洼浅水，也可以学学大海；横竖都是水，可以相通。几粒石子，任他们暗地里掷来；几滴秽水，任他们从背后泼来就是了。这还算不到“大侮蔑”——因为大侮蔑也须有胆力。</p>
-<p>〔１〕　本篇最初发表于一九一九年一月十五日《新青年》第六卷第一号，署名唐俟。<br>〔２〕　“洗煤炭”　见《新青年》第五卷第二号（一九一八年八月十五日）《通信》栏载任鸿隽给胡适的信：“《新青年》一面讲改良文学，一面讲废灭汉文，是否自相矛盾？既要废灭不用，又用力去改良不用的物件。我们四川有句俗语说：“你要没有事做，不如洗煤炭去罢。”<br>〔３〕　九族　指自身及自身以上的父、祖、曾祖、高祖和以下的子、孙、曾孙、玄孙。另一种说法是以父族四代、母族三代、妻族二代为九族。<br>〔４〕　尼采（Ｆ．Ｎｉｅｔｚｓｃｈｅ）　参看本卷第５９页注〔２６〕。下文所说的《札拉图如是说》，即《札拉图斯特拉如是说》，是他的一部主要哲学著作。<br>〔５〕　随喜　佛家语，《修忏要旨》说：“随他修善，喜他得成。”意思是随着别人做善事，为别人获得善果而高兴。</p>
+              <h1 id="函数调用栈"><a href="#函数调用栈" class="headerlink" title="函数调用栈"></a>函数调用栈</h1><h2 id="栈的布局"><a href="#栈的布局" class="headerlink" title="栈的布局"></a>栈的布局</h2><ul>
+<li>由高地址向低地址增长</li>
+<li>栈帧结构的两端由两个指针来指定<ul>
+<li>栈指针：%rsp，指向栈顶，地址更高</li>
+<li>桢指针：%rbp，指向栈底，地址更低</li>
+</ul>
+</li>
+</ul>
+<h2 id="出栈入栈"><a href="#出栈入栈" class="headerlink" title="出栈入栈"></a>出栈入栈</h2><ul>
+<li>pushq Src<ul>
+<li>从Src取操作数</li>
+<li>将%rsp减8</li>
+<li>将操作数写到%rsp指向的地址</li>
+</ul>
+</li>
+<li>popq Dst<ul>
+<li>从%rsp中保存的地址值读取数值</li>
+<li>将 %rsp加 8</li>
+<li>将数值保存到Dst (必须是寄存器)</li>
+</ul>
+</li>
+</ul>
+<h1 id="过程控制"><a href="#过程控制" class="headerlink" title="过程控制"></a>过程控制</h1><ul>
+<li>A函数调用B函数<ul>
+<li>A是调用过程</li>
+<li>B是被调用过程</li>
+</ul>
+</li>
+<li>返回地址入栈<ul>
+<li>返回地址（return address）是紧随call指令的下一条指令的地址</li>
+</ul>
+</li>
+<li>过程返回ret<ul>
+<li>从栈中弹出返回地址</li>
+<li>跳转到返回地址</li>
+</ul>
+</li>
+<li>要注意理解%rsp、%rip的变化</li>
+</ul>
+<h1 id="需要保存的几个状态"><a href="#需要保存的几个状态" class="headerlink" title="需要保存的几个状态"></a>需要保存的几个状态</h1><p>栈分配单位——帧，栈中单个过程实例的状态数据</p>
+<ul>
+<li>参数</li>
+<li>局部变量</li>
+<li>返回地址</li>
+</ul>
+<hr>
+<ul>
+<li>call对应push操作（栈帧开辟）</li>
+<li>ret对应pop操作（栈帧回收）</li>
+</ul>
+<p>这个地方还是要自己调试一遍程序，或者画一下过程图，分析一下地址和几个主要寄存器</p>
 
               
             </div>
@@ -313,7 +349,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%96%87%E6%91%98/" class="category-chain-item">文摘</a>
+  <a href="/categories/CSAPP/" class="category-chain-item">CSAPP</a>
   
   
 
@@ -325,6 +361,13 @@
     </div>
   
   
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%EF%BC%8Ccsapp/">#操作系统，csapp</a>
+      
+    </div>
+  
 </div>
 
 
@@ -333,8 +376,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>鲁迅《热风》 四十一〔１〕</div>
-      <div>http://gls.show/p/6068f6cf/</div>
+      <div>CSAPP：程序的机器级表示-4</div>
+      <div>http://gls.show/p/3754ea8a/</div>
     </div>
     <div class="license-meta">
       
@@ -376,18 +419,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/p/3754ea8a/" title="CSAPP：程序的机器级表示-4">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CSAPP：程序的机器级表示-4</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/p/a9307f29/" title="CSAPP：程序的机器级表示-3">
-                        <span class="hidden-mobile">CSAPP：程序的机器级表示-3</span>
+                      <a href="/p/6068f6cf/" title="鲁迅《热风》 四十一〔１〕">
+                        <span class="hidden-mobile">鲁迅《热风》 四十一〔１〕</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

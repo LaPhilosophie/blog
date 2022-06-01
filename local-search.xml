@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>CSAPP：程序的机器级表示-4</title>
+    <link href="/p/3754ea8a/"/>
+    <url>/p/3754ea8a/</url>
+    
+    <content type="html"><![CDATA[<h1 id="函数调用栈"><a href="#函数调用栈" class="headerlink" title="函数调用栈"></a>函数调用栈</h1><h2 id="栈的布局"><a href="#栈的布局" class="headerlink" title="栈的布局"></a>栈的布局</h2><ul><li>由高地址向低地址增长</li><li>栈帧结构的两端由两个指针来指定<ul><li>栈指针：%rsp，指向栈顶，地址更高</li><li>桢指针：%rbp，指向栈底，地址更低</li></ul></li></ul><h2 id="出栈入栈"><a href="#出栈入栈" class="headerlink" title="出栈入栈"></a>出栈入栈</h2><ul><li>pushq Src<ul><li>从Src取操作数</li><li>将%rsp减8</li><li>将操作数写到%rsp指向的地址</li></ul></li><li>popq Dst<ul><li>从%rsp中保存的地址值读取数值</li><li>将 %rsp加 8</li><li>将数值保存到Dst (必须是寄存器)</li></ul></li></ul><h1 id="过程控制"><a href="#过程控制" class="headerlink" title="过程控制"></a>过程控制</h1><ul><li>A函数调用B函数<ul><li>A是调用过程</li><li>B是被调用过程</li></ul></li><li>返回地址入栈<ul><li>返回地址（return address）是紧随call指令的下一条指令的地址</li></ul></li><li>过程返回ret<ul><li>从栈中弹出返回地址</li><li>跳转到返回地址</li></ul></li><li>要注意理解%rsp、%rip的变化</li></ul><h1 id="需要保存的几个状态"><a href="#需要保存的几个状态" class="headerlink" title="需要保存的几个状态"></a>需要保存的几个状态</h1><p>栈分配单位——帧，栈中单个过程实例的状态数据</p><ul><li>参数</li><li>局部变量</li><li>返回地址</li></ul><hr><ul><li>call对应push操作（栈帧开辟）</li><li>ret对应pop操作（栈帧回收）</li></ul><p>这个地方还是要自己调试一遍程序，或者画一下过程图，分析一下地址和几个主要寄存器</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>CSAPP</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>操作系统，csapp</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>鲁迅《热风》 四十一〔１〕</title>
     <link href="/p/6068f6cf/"/>
     <url>/p/6068f6cf/</url>
