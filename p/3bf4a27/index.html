@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://gls.show/image/csapp1.png">
 <meta property="article:published_time" content="2022-05-22T14:17:40.182Z">
-<meta property="article:modified_time" content="2022-05-30T12:36:55.321Z">
+<meta property="article:modified_time" content="2022-06-02T12:40:47.409Z">
 <meta property="article:author" content="郭佳明">
 <meta property="article:tag" content="操作系统，csapp">
 <meta name="twitter:card" content="summary_large_image">
@@ -210,7 +210,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          3.1k 字
+          3.6k 字
         
       </span>
     
@@ -222,7 +222,7 @@
         
         
           <!-- compatible with older versions-->
-          10 分钟
+          12 分钟
         
       </span>
     
@@ -274,7 +274,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    本文最后更新于：2022年5月30日 晚上
+                    本文最后更新于：2022年6月2日 晚上
                   
                 
               </p>
@@ -356,6 +356,59 @@
 <td align="center"><strong>汇编器</strong></td>
 <td align="center">nasm</td>
 <td align="center">gas</td>
+</tr>
+</tbody></table>
+<p>关于操作数大小：</p>
+<ul>
+<li>AT&amp;T语法：以’b’, ‘w’和 ‘l’为后缀指明内存访问长度是 byte(8-bit), word(16-bit)还是long(32-bit)</li>
+<li>Intel语法：’byte ptr’, ‘word ptr’和’dword ptr’</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Intel Code</th>
+<th>AT&amp;T Code</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mov eax,1</td>
+<td>movl $1, %eax</td>
+</tr>
+<tr>
+<td>mov ebx,0ffh</td>
+<td>movl $0x0ff,%ebx,</td>
+</tr>
+<tr>
+<td>int 80h</td>
+<td>int $0x80</td>
+</tr>
+<tr>
+<td>mov ebx,eax</td>
+<td>movl %eax,%ebx</td>
+</tr>
+<tr>
+<td>mov eax,[ecx]</td>
+<td>movl (%ecx),%eax</td>
+</tr>
+<tr>
+<td>mov eax,[ecx+3]</td>
+<td>movl 3(ecx),eax</td>
+</tr>
+<tr>
+<td>mov eax,[ebx+20h]</td>
+<td>movl 0x20(%ebx),%eax</td>
+</tr>
+<tr>
+<td>add eax,[ebx+ecx*2h]</td>
+<td>addl (%ebx,%ecx,%0x2),%eax</td>
+</tr>
+<tr>
+<td>lea eax,[ebx+ecx]</td>
+<td>leal (%ebx,%ecx),%eax</td>
+</tr>
+<tr>
+<td>sub eax,[ebx+ecx*4h-20h]</td>
+<td>subl -0x20(%ebx,%ecx,0x4),%eax</td>
 </tr>
 </tbody></table>
 <h1 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h1><ul>
