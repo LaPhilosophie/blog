@@ -16,25 +16,26 @@
   <meta name="author" content="郭佳明">
   <meta name="keywords" content="">
   
-    <meta name="description" content="一个.c文件是如何成为一个可执行二进制文件的？   文件后缀 被执行过程 工具 细节    .c 预处理 预处理器（cpp，c pre-processor） 宏替换、头文件展开、注释删除   .i 编译 ccl C语言程序转化为汇编语言程序(.s)   .s 汇编 编译器 汇编语言程序转化可重定位目标文件(.o)   .o 链接 ld（链接器） 将多个.o文件链接为一个可执行文件    预处理使用">
+    <meta name="description" content="gdb常用命令需要调试的demo： 12345678910111213141516#include &lt;stdio.h&gt;int add_range(int low, int high)&amp;#123;        int i, sum;        for (i &#x3D; low; i &lt;&#x3D; high; i++)                sum &#x3D; sum + i;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="程序的生命周期：从.c文件到二进制文件">
-<meta property="og:url" content="http://gls.show/p/2e9a027c/index.html">
+<meta property="og:title" content="gdb调试：一个简单的入门">
+<meta property="og:url" content="http://gls.show/p/66ee2080/index.html">
 <meta property="og:site_name" content="郭佳明的博客">
-<meta property="og:description" content="一个.c文件是如何成为一个可执行二进制文件的？   文件后缀 被执行过程 工具 细节    .c 预处理 预处理器（cpp，c pre-processor） 宏替换、头文件展开、注释删除   .i 编译 ccl C语言程序转化为汇编语言程序(.s)   .s 汇编 编译器 汇编语言程序转化可重定位目标文件(.o)   .o 链接 ld（链接器） 将多个.o文件链接为一个可执行文件    预处理使用">
+<meta property="og:description" content="gdb常用命令需要调试的demo： 12345678910111213141516#include &lt;stdio.h&gt;int add_range(int low, int high)&amp;#123;        int i, sum;        for (i &#x3D; low; i &lt;&#x3D; high; i++)                sum &#x3D; sum + i;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://gls.show/image/csapp1.png">
-<meta property="article:published_time" content="2022-05-22T10:11:50.515Z">
-<meta property="article:modified_time" content="2022-05-28T12:26:01.577Z">
+<meta property="og:image" content="http://gls.show/image/assembly1.jpeg">
+<meta property="article:published_time" content="2022-06-06T09:46:12.456Z">
+<meta property="article:modified_time" content="2022-06-12T07:54:45.982Z">
 <meta property="article:author" content="郭佳明">
+<meta property="article:tag" content="gdb，调试">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://gls.show/image/csapp1.png">
+<meta name="twitter:image" content="http://gls.show/image/assembly1.jpeg">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>程序的生命周期：从.c文件到二进制文件 - 郭佳明的博客</title>
+  <title>gdb调试：一个简单的入门 - 郭佳明的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -185,7 +186,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="程序的生命周期：从.c文件到二进制文件"></span>
+            <span id="subtitle" data-typed-text="gdb调试：一个简单的入门"></span>
           
         </div>
 
@@ -196,8 +197,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-05-22 18:11" pubdate>
-          2022年5月22日 晚上
+        <time datetime="2022-06-06 17:46" pubdate>
+          2022年6月6日 下午
         </time>
       </span>
     
@@ -209,7 +210,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          1.8k 字
+          1.3k 字
         
       </span>
     
@@ -221,7 +222,7 @@
         
         
           <!-- compatible with older versions-->
-          6 分钟
+          5 分钟
         
       </span>
     
@@ -267,132 +268,86 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">程序的生命周期：从.c文件到二进制文件</h1>
+            <h1 style="display: none">gdb调试：一个简单的入门</h1>
             
               <p class="note note-info">
                 
                   
                     <!-- compatible with older versions-->
-                    本文最后更新于：2022年5月28日 晚上
+                    本文最后更新于：2022年6月12日 下午
                   
                 
               </p>
             
             <div class="markdown-body">
               
-              <h1 id="一个-c文件是如何成为一个可执行二进制文件的？"><a href="#一个-c文件是如何成为一个可执行二进制文件的？" class="headerlink" title="一个.c文件是如何成为一个可执行二进制文件的？"></a>一个.c文件是如何成为一个可执行二进制文件的？</h1><table>
-<thead>
-<tr>
-<th>文件后缀</th>
-<th>被执行过程</th>
-<th>工具</th>
-<th>细节</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>.c</td>
-<td>预处理</td>
-<td>预处理器（cpp，c pre-processor）</td>
-<td>宏替换、头文件展开、注释删除</td>
-</tr>
-<tr>
-<td>.i</td>
-<td>编译</td>
-<td>ccl</td>
-<td>C语言程序转化为汇编语言程序(.s)</td>
-</tr>
-<tr>
-<td>.s</td>
-<td>汇编</td>
-<td>编译器</td>
-<td>汇编语言程序转化可重定位目标文件(.o)</td>
-</tr>
-<tr>
-<td>.o</td>
-<td>链接</td>
-<td>ld（链接器）</td>
-<td>将多个.o文件链接为一个可执行文件</td>
-</tr>
-</tbody></table>
-<p><img src="/image/31h00bitb5.jpg" srcset="/img/loading.gif" lazyload></p>
-<h1 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h1><p>使用cpp（C 预处理器）完成了：</p>
-<ul>
-<li>将.c文件转化为.i文件<ul>
-<li>在这里.i文件只是一个后缀而已，本质上仍然是文本文件</li>
-</ul>
-</li>
-<li>宏替换</li>
-<li>头文件展开<ul>
-<li>找到#include的文件内容将其插入到.c文件中</li>
-</ul>
-</li>
-<li>注释删除</li>
-</ul>
-<p>将hello.c文件得到的预处理结果重定向到hello.i</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">cpp hello.c &gt; hello.i<br></code></pre></td></tr></table></figure>
-
+              <p><img src="/image/assembly1.jpeg" srcset="/img/loading.gif" lazyload></p>
+<h1 id="gdb常用命令"><a href="#gdb常用命令" class="headerlink" title="gdb常用命令"></a>gdb常用命令</h1><p>需要调试的demo：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">add_range</span><span class="hljs-params">(<span class="hljs-keyword">int</span> low, <span class="hljs-keyword">int</span> high)</span></span><br><span class="hljs-function"></span>&#123;<br>        <span class="hljs-keyword">int</span> i, sum;<br>        <span class="hljs-keyword">for</span> (i = low; i &lt;= high; i++)<br>                sum = sum + i;<br>        <span class="hljs-keyword">return</span> sum;<br>&#125;<br>        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span><br><span class="hljs-function"></span>&#123;<br>        <span class="hljs-keyword">int</span> result[<span class="hljs-number">100</span>];<br>        result[<span class="hljs-number">0</span>] = add_range(<span class="hljs-number">1</span>, <span class="hljs-number">10</span>);<br>        result[<span class="hljs-number">1</span>] = add_range(<span class="hljs-number">1</span>, <span class="hljs-number">100</span>);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;result[0]=%d\nresult[1]=%d\n&quot;</span>,result[<span class="hljs-number">0</span>], result[<span class="hljs-number">1</span>]);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>得到可执行文件main，运行后发现输出了55、5105，这显然是错误的，因此需要调试</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">gcc -g hello<span class="hljs-selector-class">.c</span> -o <span class="hljs-selector-tag">main</span><br></code></pre></td></tr></table></figure>
 <blockquote>
-<p>可以使用man cpp得到预处理器的相关信息</p>
+<p>-g选项的作用是在目标文件中加入源代码的信息，比如目标文件中第几条机器指令对应源代码的第几行</p>
 </blockquote>
-<p>测试代码：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/syscall.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">char</span> *msg = <span class="hljs-string">&quot;Hello, world!\n&quot;</span>;<br>    syscall(SYS_write, <span class="hljs-number">1</span>, msg, <span class="hljs-built_in">strlen</span>(msg));<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
-<h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><ul>
-<li>使用编译器将.i文件转换为.s文件</li>
-<li>将C语言文本转换为汇编语言文本(Assembly Code)</li>
-<li>命令：<code> gcc hello.i -S -o hello.s</code></li>
+<p>命令行输入gdb main进入调试</p>
+<p>gdb常用的命令：</p>
+<ul>
+<li>list<ul>
+<li>输出源代码</li>
+<li>默认从第一行开始列出十行</li>
+<li>可简写为l</li>
+<li>list n 输出第n行前后的代码</li>
+<li>list function_name输出函数function_name输出函数前后的代码前后的代码</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs c">        .file   <span class="hljs-string">&quot;hello.c&quot;</span><br>        .text<br>        .section        .rodata<br>.LC0:<br>        .<span class="hljs-built_in">string</span> <span class="hljs-string">&quot;Hello, world!\n&quot;</span><br>        .text<br>        .globl  main<br>        .type   main, @function<br>main:<br>.LFB0:<br>        .cfi_startproc<br>        endbr64<br>        pushq   %rbp<br>        .cfi_def_cfa_offset <span class="hljs-number">16</span><br>        .cfi_offset <span class="hljs-number">6</span>, <span class="hljs-number">-16</span><br>        movq    %rsp, %rbp<br>        .cfi_def_cfa_register <span class="hljs-number">6</span><br>        subq    $<span class="hljs-number">32</span>, %rsp<br>        movl    %edi, <span class="hljs-number">-20</span>(%rbp)<br>        movq    %rsi, <span class="hljs-number">-32</span>(%rbp)<br>        leaq    .LC0(%rip), %rax<br>        movq    %rax, <span class="hljs-number">-8</span>(%rbp)<br>        movq    <span class="hljs-number">-8</span>(%rbp), %rax<br>        movq    %rax, %rdi<br>        call    <span class="hljs-built_in">strlen</span>@PLT<br>        movq    %rax, %rdx<br>        movq    <span class="hljs-number">-8</span>(%rbp), %rax<br>        movq    %rdx, %rcx<br>        movq    %rax, %rdx<br>        movl    $<span class="hljs-number">1</span>, %esi<br>        movl    $<span class="hljs-number">1</span>, %edi<br>        movl    $<span class="hljs-number">0</span>, %eax<br>        call    syscall@PLT<br>        movl    $<span class="hljs-number">0</span>, %eax<br>        leave<br>        .cfi_def_cfa <span class="hljs-number">7</span>, <span class="hljs-number">8</span><br>        ret<br>        .cfi_endproc<br>.LFE0:<br>        .size   main, .-main<br>        .ident  <span class="hljs-string">&quot;GCC: (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0&quot;</span><br>        .section        .note.GNU-<span class="hljs-built_in">stack</span>,<span class="hljs-string">&quot;&quot;</span>,@progbits<br>        .section        .note.gnu.property,<span class="hljs-string">&quot;a&quot;</span><br>        .align <span class="hljs-number">8</span><br>        .<span class="hljs-keyword">long</span>    <span class="hljs-number">1f</span> - <span class="hljs-number">0f</span><br>        .<span class="hljs-keyword">long</span>    <span class="hljs-number">4f</span> - <span class="hljs-number">1f</span><br>        .<span class="hljs-keyword">long</span>    <span class="hljs-number">5</span><br><span class="hljs-number">0</span>:<br>        .<span class="hljs-built_in">string</span>  <span class="hljs-string">&quot;GNU&quot;</span><br><span class="hljs-number">1</span>:<br>        .align <span class="hljs-number">8</span><br>        .<span class="hljs-keyword">long</span>    <span class="hljs-number">0xc0000002</span><br>        .<span class="hljs-keyword">long</span>    <span class="hljs-number">3f</span> - <span class="hljs-number">2f</span><br><span class="hljs-number">2</span>:<br>        .<span class="hljs-keyword">long</span>    <span class="hljs-number">0x3</span><br><span class="hljs-number">3</span>:<br>        .align <span class="hljs-number">8</span><br><span class="hljs-number">4</span>:<br></code></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th>.file</th>
-<th>源文件</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>.text</td>
-<td>代码段</td>
-</tr>
-<tr>
-<td>.global</td>
-<td>全局变量</td>
-</tr>
-<tr>
-<td>.data</td>
-<td>存放已经初始化的全局和静态C 变量</td>
-</tr>
-<tr>
-<td>.section  .rodata</td>
-<td>存放只读变量</td>
-</tr>
-<tr>
-<td>.align</td>
-<td>对齐方式</td>
-</tr>
-<tr>
-<td>.type</td>
-<td>表示是函数类型/对象类型</td>
-</tr>
-<tr>
-<td>.size</td>
-<td>表示大小</td>
-</tr>
-<tr>
-<td>.long  .string</td>
-<td>表示是long类型/string类型</td>
-</tr>
-</tbody></table>
-<h1 id="汇编"><a href="#汇编" class="headerlink" title="汇编"></a>汇编</h1><ul>
-<li>编译器将汇编语言程序转化为可重定位目标文件</li>
-<li>.s —&gt; .o 指令为<code>gcc -c hello.s -o hello.o</code></li>
-<li>objdump 分析hello.o：<code>objdump -d hello.o</code></li>
+</li>
+<li>提示符下直接敲回车表示用适当的参数重复上一条命令</li>
+<li>quit退出gdb</li>
+<li>run运行程序</li>
+<li>next往后执行一句代码</li>
+<li>backtrace查看函数调用的栈帧</li>
+<li>finish命令让程序一直运行到从当前函数返回为止</li>
+<li>p命令可以打印出某个变量的值，包括地址</li>
+<li>set var可以改变变量的值</li>
+<li>backtrace（或bt）查看各级函数调用及参数</li>
+<li>frame + 帧编号选择栈帧</li>
+<li>info（或i） locals查看当前栈帧局部变量的值</li>
+<li>display + 变量名 可以每次停下来的时候自动打印变量的值</li>
+<li>用undisplay可以取消对先前设置的那些变量的跟踪<br>通过调试发现错误：</li>
+<li>通过step步入add_range函数，发现前后两次调用函数中sum的值并没有都初始化为0（第二次调用add_range的时候sum的值为55）</li>
 </ul>
-<h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h1><p>将多个.o文件链接为一个可执行文件</p>
-<p>关于链接器的更多内容：<code>man ld</code></p>
+<h1 id="断点调试"><a href="#断点调试" class="headerlink" title="断点调试"></a>断点调试</h1><ul>
+<li>break + 函数 可以在某个函数开头设置断点</li>
+<li>break + 行号 可以在某一行停止</li>
+<li>i breakpoints列出所有断点</li>
+<li>delete breakpoints删除断点</li>
+<li>disable/enable breakpoints禁用/启用断点</li>
+<li>条件断点<ul>
+<li>break 9 if sum != 0</li>
+<li>如果sum!=0就在第九行打断点</li>
+</ul>
+</li>
+<li>display + 变量名：跟踪查看一个变量，每次停下来都显示它的值</li>
+<li>undisplay取消对先前设置的那些变量的跟踪</li>
+<li>continue（或c）从当前位置开始连续而非单步执行程序</li>
+<li>run（或r）从头开始连续而非单步执行程序</li>
+</ul>
+<h1 id="观察点"><a href="#观察点" class="headerlink" title="观察点"></a>观察点</h1><ul>
+<li>断点是当程序执行到某一代码行时中断，而观察点是当程序访问某一存储单元时中断，如果我们不知道某一存储单元是在哪里被改动的，这时候观察点尤其有用</li>
+<li>用watch命令设置观察点</li>
+<li>i watchpoints 查看当前设置了哪些观察点</li>
+<li>x 从某个位置开始打印存储器的一段内容，全部当成字节来看，而不区分哪些字节属于哪些变量</li>
+</ul>
+<blockquote>
+<ul>
+<li>x/7b input<ul>
+<li>x命令打印存储器中的内容</li>
+<li>7b是打印格式</li>
+<li>b表示每个字节一组</li>
+<li>7表示打印7组</li>
+</ul>
+</li>
+</ul>
+</blockquote>
 
               
             </div>
@@ -410,7 +365,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/CSAPP/" class="category-chain-item">CSAPP</a>
+  <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" class="category-chain-item">汇编语言</a>
   
   
 
@@ -422,6 +377,13 @@
     </div>
   
   
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/gdb%EF%BC%8C%E8%B0%83%E8%AF%95/">#gdb，调试</a>
+      
+    </div>
+  
 </div>
 
 
@@ -430,8 +392,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>程序的生命周期：从.c文件到二进制文件</div>
-      <div>http://gls.show/p/2e9a027c/</div>
+      <div>gdb调试：一个简单的入门</div>
+      <div>http://gls.show/p/66ee2080/</div>
     </div>
     <div class="license-meta">
       
@@ -443,7 +405,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年5月22日</div>
+          <div>2022年6月6日</div>
         </div>
       
       
@@ -473,18 +435,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/p/3bf4a27/" title="CSAPP：程序的机器级表示-1">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CSAPP：程序的机器级表示-1</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/p/5bb7293b/" title="PhD之路">
-                        <span class="hidden-mobile">PhD之路</span>
+                      <a href="/p/279b9795/" title="C语言复杂指针声明">
+                        <span class="hidden-mobile">C语言复杂指针声明</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
