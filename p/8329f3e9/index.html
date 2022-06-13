@@ -16,26 +16,25 @@
   <meta name="author" content="郭佳明">
   <meta name="keywords" content="">
   
-    <meta name="description" content="全局变量 在整个程序生命周期内都是有效的 在任意的函数内部能访问全局变量 系统会自动对全局变量初始化 保存在内存的全局存储区中，占用静态的存储单元     数据类型 初始化默认值    int 0   char ‘\0’   float 0   double 0   pointer NULL   局部变量 在某个函数或块的内部声明的变量 只能被该函数或该代码块内部的语句使用 保存在栈中  作用域">
+    <meta name="description" content="gdb调试gdb调试：一个简单的入门 ldd 查看程序运行所需的共享库（.so文件）,常用来解决因缺少某个库文件而不能运行的问题 使用方式：ldd + 文件名 输出三列，分别是依赖的库、库的位置、库加载的起始地址  top实时显示系统中各个进程的资源占用状况 交互指令：  i：只显示正在运行的进程 h：帮助命令 q：退出 u：指定显示用户进程 P：按%CPU使用率排行 T：按MITE+排行 M：按">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言：作用域规则">
-<meta property="og:url" content="http://gls.show/p/b163e116/index.html">
+<meta property="og:title" content="Linux运维常用工具">
+<meta property="og:url" content="http://gls.show/p/8329f3e9/index.html">
 <meta property="og:site_name" content="郭佳明的博客">
-<meta property="og:description" content="全局变量 在整个程序生命周期内都是有效的 在任意的函数内部能访问全局变量 系统会自动对全局变量初始化 保存在内存的全局存储区中，占用静态的存储单元     数据类型 初始化默认值    int 0   char ‘\0’   float 0   double 0   pointer NULL   局部变量 在某个函数或块的内部声明的变量 只能被该函数或该代码块内部的语句使用 保存在栈中  作用域">
+<meta property="og:description" content="gdb调试gdb调试：一个简单的入门 ldd 查看程序运行所需的共享库（.so文件）,常用来解决因缺少某个库文件而不能运行的问题 使用方式：ldd + 文件名 输出三列，分别是依赖的库、库的位置、库加载的起始地址  top实时显示系统中各个进程的资源占用状况 交互指令：  i：只显示正在运行的进程 h：帮助命令 q：退出 u：指定显示用户进程 P：按%CPU使用率排行 T：按MITE+排行 M：按">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://gls.show/image/cpro.png">
-<meta property="article:published_time" content="2022-06-05T01:30:15.759Z">
-<meta property="article:modified_time" content="2022-06-12T07:58:17.340Z">
+<meta property="og:image" content="http://gls.show/image/default.png">
+<meta property="article:published_time" content="2022-06-13T10:02:05.009Z">
+<meta property="article:modified_time" content="2022-06-13T14:33:19.234Z">
 <meta property="article:author" content="郭佳明">
-<meta property="article:tag" content="C语言">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://gls.show/image/cpro.png">
+<meta name="twitter:image" content="http://gls.show/image/default.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>C语言：作用域规则 - 郭佳明的博客</title>
+  <title>Linux运维常用工具 - 郭佳明的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -186,7 +185,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="C语言：作用域规则"></span>
+            <span id="subtitle" data-typed-text="Linux运维常用工具"></span>
           
         </div>
 
@@ -197,8 +196,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-05 09:30" pubdate>
-          2022年6月5日 上午
+        <time datetime="2022-06-13 18:02" pubdate>
+          2022年6月13日 晚上
         </time>
       </span>
     
@@ -210,7 +209,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          526 字
+          2.2k 字
         
       </span>
     
@@ -222,7 +221,7 @@
         
         
           <!-- compatible with older versions-->
-          2 分钟
+          7 分钟
         
       </span>
     
@@ -268,74 +267,76 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">C语言：作用域规则</h1>
+            <h1 style="display: none">Linux运维常用工具</h1>
             
               <p class="note note-info">
                 
                   
                     <!-- compatible with older versions-->
-                    本文最后更新于：2022年6月12日 下午
+                    本文最后更新于：2022年6月13日 晚上
                   
                 
               </p>
             
             <div class="markdown-body">
               
-              <p><img src="/image/cpro.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h1><ul>
-<li>在整个程序生命周期内都是有效的</li>
-<li>在任意的函数内部能访问全局变量</li>
-<li>系统会自动对全局变量初始化</li>
-<li>保存在内存的全局存储区中，占用静态的存储单元</li>
+              <h1 id="gdb调试"><a href="#gdb调试" class="headerlink" title="gdb调试"></a>gdb调试</h1><p><a href="https://gls.show/p/66ee2080/">gdb调试：一个简单的入门</a></p>
+<h1 id="ldd"><a href="#ldd" class="headerlink" title="ldd"></a>ldd</h1><ul>
+<li>查看程序运行所需的共享库（.so文件）,常用来解决因缺少某个库文件而不能运行的问题</li>
+<li>使用方式：ldd + 文件名</li>
+<li>输出三列，分别是依赖的库、库的位置、库加载的起始地址</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>数据类型</th>
-<th>初始化默认值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>int</td>
-<td>0</td>
-</tr>
-<tr>
-<td>char</td>
-<td>‘\0’</td>
-</tr>
-<tr>
-<td>float</td>
-<td>0</td>
-</tr>
-<tr>
-<td>double</td>
-<td>0</td>
-</tr>
-<tr>
-<td>pointer</td>
-<td>NULL</td>
-</tr>
-</tbody></table>
-<h1 id="局部变量"><a href="#局部变量" class="headerlink" title="局部变量"></a>局部变量</h1><ul>
-<li>在某个函数或块的内部声明的变量</li>
-<li>只能被该函数或该代码块内部的语句使用</li>
-<li>保存在栈中</li>
+<h1 id="top"><a href="#top" class="headerlink" title="top"></a>top</h1><p>实时显示系统中各个进程的资源占用状况</p>
+<p>交互指令：</p>
+<ul>
+<li>i：只显示正在运行的进程</li>
+<li>h：帮助命令</li>
+<li>q：退出</li>
+<li>u：指定显示用户进程</li>
+<li>P：按%CPU使用率排行</li>
+<li>T：按MITE+排行</li>
+<li>M：按%MEM排行</li>
+<li>c：显示命令完全模式</li>
+<li>s：设置刷新时间间隔</li>
+<li>按键盘数字“1”，可监控每个逻辑CPU的状况</li>
 </ul>
-<h1 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h1><ul>
-<li>名字的作用域指的是程序中可以使用该名字的部分</li>
-<li>变量或函数的作用域从声明它的地方开始，到其所在的（待编译的）文件的末尾结束</li>
-<li>一个程序具有多个文件，一个变量只能在某个文件中定义一次，而其他文件可以通过extern声明来访问它</li>
+<p>一些缩写：</p>
+<ul>
+<li>PID：进程的ID</li>
+<li>USER：进程所有者</li>
+<li>PR：进程的优先级别，越小越优先被执行</li>
+<li>VIRT：进程占用的虚拟内存</li>
+<li>RES：进程占用的物理内存</li>
+<li>SHR：进程使用的共享内存</li>
+<li>%CPU：进程占用CPU的使用率</li>
+<li>%MEM：进程使用的物理内存和总内存的百分比</li>
+<li>TIME+：该进程启动后占用的总的CPU时间，即占用CPU使用时间的累加值</li>
+<li>COMMAND：进程启动命令名称</li>
 </ul>
-<p>file1：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">extern</span> <span class="hljs-keyword">int</span> sp;<br><span class="hljs-keyword">extern</span> <span class="hljs-keyword">double</span> val[];<span class="hljs-comment">//注意这里</span><br></code></pre></td></tr></table></figure>
-<p>file2:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">int</span> sp = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">double</span> val[MAXVAL];<br></code></pre></td></tr></table></figure>
-<p>这样的话，sp和val可以在file1中使用</p>
-<h1 id="static关键字"><a href="#static关键字" class="headerlink" title="static关键字"></a>static关键字</h1><ul>
-<li>用 static声明限定外部变量与函数，可以将其后声明的对象的作用域限定为被编译源文件的剩余部分</li>
-<li>static 类型的内部变量是一种只能在某个特定函数中使用但一直占据存储空间的变量</li>
+<p>cpu：</p>
+<ul>
+<li>us 用户空间占用CPU百分比</li>
+<li>sy 内核空间占用CPU百分比</li>
+<li>ni 用户进程空间内改变过优先级的进程占用CPU百分比</li>
+<li>id 空闲CPU百分比</li>
+<li>wa 等待输入输出的CPU时间百分比</li>
+<li>hi 硬件中断</li>
+<li>si 软件中断 </li>
 </ul>
-<p>在不进行显式初始化的情况下，外部变量和静态变量都将被初始化为 0，而自动变量和寄存器变量的初值则没有定义（即初值为无用的信息）</p>
+<h1 id="lsof"><a href="#lsof" class="headerlink" title="lsof"></a>lsof</h1><blockquote>
+<p>lsof（list open files）<br>通过文件不仅仅可以访问常规数据，还可以访问网络连接和硬件。如传输控制协议 (TCP) 和用户数据报协议 (UDP) 套接字等</p>
+</blockquote>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs vhdl">Lists <span class="hljs-keyword">open</span> files <span class="hljs-keyword">and</span> the corresponding processes.<br> <span class="hljs-literal">Note</span>: Root privileges (<span class="hljs-keyword">or</span> sudo) <span class="hljs-keyword">is</span> required <span class="hljs-keyword">to</span> list files opened by <span class="hljs-keyword">others</span>.<br> More information: https://manned.org/lsof.<br><br> - Find the processes that have a given <span class="hljs-keyword">file</span> <span class="hljs-keyword">open</span>:<br>   lsof path/<span class="hljs-keyword">to</span>/<span class="hljs-keyword">file</span><br><br> - Find the <span class="hljs-keyword">process</span> that opened a local internet <span class="hljs-keyword">port</span>:<br>   lsof -i :<span class="hljs-keyword">port</span><br><br> - Only output the <span class="hljs-keyword">process</span> ID (PID):<br>   lsof -t path/<span class="hljs-keyword">to</span>/<span class="hljs-keyword">file</span><br><br> - List files opened by the given user:<br>   lsof -u username<br><br> - List files opened by the given command <span class="hljs-keyword">or</span> <span class="hljs-keyword">process</span>:<br>   lsof -c process_or_command_name<br><br> - List files opened by a specific <span class="hljs-keyword">process</span>, given its PID:<br>   lsof -p PID<br><br> - List <span class="hljs-keyword">open</span> files <span class="hljs-keyword">in</span> a directory:<br>   lsof +D path/<span class="hljs-keyword">to</span>/directory<br><br> - Find the <span class="hljs-keyword">process</span> that <span class="hljs-keyword">is</span> listening <span class="hljs-keyword">on</span> a local IPv6 TCP <span class="hljs-keyword">port</span> <span class="hljs-keyword">and</span> don<span class="hljs-symbol">&#x27;t</span> convert network <span class="hljs-keyword">or</span> <span class="hljs-keyword">port</span> numbers:<br>   lsof -i6TCP:<span class="hljs-keyword">port</span> -sTCP:LISTEN -n -P<br></code></pre></td></tr></table></figure>
+
+<h1 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h1><p>查看进程</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs vim"><br><span class="hljs-keyword">ps</span><br><br>Information about running processes.<br>More information: http<span class="hljs-variable">s:</span>//manned.org/<span class="hljs-keyword">ps</span>.<br><br>- List <span class="hljs-keyword">all</span> running processe<span class="hljs-variable">s:</span><br>  <span class="hljs-keyword">ps</span> aux<br><br>- List <span class="hljs-keyword">all</span> running processes including the full <span class="hljs-keyword">command</span> strin<span class="hljs-variable">g:</span><br>  <span class="hljs-keyword">ps</span> auxww<br><br>- Search <span class="hljs-keyword">for</span> <span class="hljs-keyword">a</span> process that matches <span class="hljs-keyword">a</span> strin<span class="hljs-variable">g:</span><br>  <span class="hljs-keyword">ps</span> aux | <span class="hljs-keyword">grep</span> <span class="hljs-built_in">string</span><br><br>- List <span class="hljs-keyword">all</span> processes of the current user in extra full forma<span class="hljs-variable">t:</span><br>  <span class="hljs-keyword">ps</span> --user $(id -<span class="hljs-keyword">u</span>) -F<br><br>- List <span class="hljs-keyword">all</span> processes of the current user <span class="hljs-keyword">as</span> <span class="hljs-keyword">a</span> tree:<br>  <span class="hljs-keyword">ps</span> --user $(id -<span class="hljs-keyword">u</span>) <span class="hljs-keyword">f</span><br><br>- Get the parent PID of <span class="hljs-keyword">a</span> proces<span class="hljs-variable">s:</span><br>  <span class="hljs-keyword">ps</span> -<span class="hljs-keyword">o</span> ppid= -<span class="hljs-keyword">p</span> pid<br><br>- Sort processes by memory consumption:<br>  <span class="hljs-keyword">ps</span> --<span class="hljs-keyword">sort</span> size<br></code></pre></td></tr></table></figure>
+<h1 id="pstack"><a href="#pstack" class="headerlink" title="pstack"></a>pstack</h1><ul>
+<li>显示每个进程的栈跟踪</li>
+<li>通过sudo apt install pstack进行安装</li>
+</ul>
+<h1 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h1><p>追踪系统调用</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><br>- Start tracing <span class="hljs-keyword">a</span> specific <span class="hljs-built_in">process</span> <span class="hljs-keyword">by</span> its PID:<br>  strace -p pid<br><br>- Trace <span class="hljs-keyword">a</span> <span class="hljs-built_in">process</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">filter</span> output <span class="hljs-keyword">by</span> <span class="hljs-keyword">system</span> call:<br>  strace -p pid -e system_call_name<br><br>- Count <span class="hljs-built_in">time</span>, calls, <span class="hljs-keyword">and</span> errors <span class="hljs-keyword">for</span> <span class="hljs-keyword">each</span> <span class="hljs-keyword">system</span> call <span class="hljs-keyword">and</span> report <span class="hljs-keyword">a</span> summary <span class="hljs-keyword">on</span> <span class="hljs-title">program</span> <span class="hljs-title">exit</span>:<br>  strace -p pid -c<br><br>- Show <span class="hljs-keyword">the</span> <span class="hljs-built_in">time</span> spent <span class="hljs-keyword">in</span> every <span class="hljs-keyword">system</span> call:<br>  strace -p pid -T<br><br>- Start tracing <span class="hljs-keyword">a</span> program <span class="hljs-keyword">by</span> executing <span class="hljs-keyword">it</span>:<br>  strace program<br><br>- Start tracing <span class="hljs-built_in">file</span> operations <span class="hljs-keyword">of</span> <span class="hljs-keyword">a</span> program:<br>  strace -e trace=<span class="hljs-built_in">file</span> program<br></code></pre></td></tr></table></figure>
+
 
               
             </div>
@@ -343,34 +344,6 @@
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/C%E8%AF%AD%E8%A8%80/" class="category-chain-item">C语言</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/C%E8%AF%AD%E8%A8%80/">#C语言</a>
-      
-    </div>
   
 </div>
 
@@ -380,8 +353,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>C语言：作用域规则</div>
-      <div>http://gls.show/p/b163e116/</div>
+      <div>Linux运维常用工具</div>
+      <div>http://gls.show/p/8329f3e9/</div>
     </div>
     <div class="license-meta">
       
@@ -393,7 +366,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年6月5日</div>
+          <div>2022年6月13日</div>
         </div>
       
       
@@ -423,18 +396,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/p/279b9795/" title="C语言：复杂指针声明">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">C语言：复杂指针声明</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/p/e9b29492/" title="CSAPP：链接">
-                        <span class="hidden-mobile">CSAPP：链接</span>
+                      <a href="/p/913c096e/" title="nginx高性能web服务器详解">
+                        <span class="hidden-mobile">nginx高性能web服务器详解</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

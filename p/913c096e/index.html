@@ -16,26 +16,25 @@
   <meta name="author" content="郭佳明">
   <meta name="keywords" content="">
   
-    <meta name="description" content="全局变量 在整个程序生命周期内都是有效的 在任意的函数内部能访问全局变量 系统会自动对全局变量初始化 保存在内存的全局存储区中，占用静态的存储单元     数据类型 初始化默认值    int 0   char ‘\0’   float 0   double 0   pointer NULL   局部变量 在某个函数或块的内部声明的变量 只能被该函数或该代码块内部的语句使用 保存在栈中  作用域">
+    <meta name="description" content="常见web服务器介绍 Apache a patchy server 占据web服务器的半壁江山 开源   Tomcat 轻量级应用服务器 无法满足复杂业务场景 免费、开源 体积小，易于安装部署   Nginx 免费、开源、后来居上 高性能http服务器 功能多（包括支持反向代理、负载均衡、IMAP&#x2F;POP3代理服务、SSL等功能） 常用功能：负载均衡、反向代理、web缓存    Nginx的安装官">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言：作用域规则">
-<meta property="og:url" content="http://gls.show/p/b163e116/index.html">
+<meta property="og:title" content="nginx高性能web服务器详解">
+<meta property="og:url" content="http://gls.show/p/913c096e/index.html">
 <meta property="og:site_name" content="郭佳明的博客">
-<meta property="og:description" content="全局变量 在整个程序生命周期内都是有效的 在任意的函数内部能访问全局变量 系统会自动对全局变量初始化 保存在内存的全局存储区中，占用静态的存储单元     数据类型 初始化默认值    int 0   char ‘\0’   float 0   double 0   pointer NULL   局部变量 在某个函数或块的内部声明的变量 只能被该函数或该代码块内部的语句使用 保存在栈中  作用域">
+<meta property="og:description" content="常见web服务器介绍 Apache a patchy server 占据web服务器的半壁江山 开源   Tomcat 轻量级应用服务器 无法满足复杂业务场景 免费、开源 体积小，易于安装部署   Nginx 免费、开源、后来居上 高性能http服务器 功能多（包括支持反向代理、负载均衡、IMAP&#x2F;POP3代理服务、SSL等功能） 常用功能：负载均衡、反向代理、web缓存    Nginx的安装官">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://gls.show/image/cpro.png">
-<meta property="article:published_time" content="2022-06-05T01:30:15.759Z">
-<meta property="article:modified_time" content="2022-06-12T07:58:17.340Z">
+<meta property="og:image" content="http://gls.show/image/default.png">
+<meta property="article:published_time" content="2022-06-13T10:00:13.340Z">
+<meta property="article:modified_time" content="2022-06-13T13:45:20.456Z">
 <meta property="article:author" content="郭佳明">
-<meta property="article:tag" content="C语言">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://gls.show/image/cpro.png">
+<meta name="twitter:image" content="http://gls.show/image/default.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>C语言：作用域规则 - 郭佳明的博客</title>
+  <title>nginx高性能web服务器详解 - 郭佳明的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -186,7 +185,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="C语言：作用域规则"></span>
+            <span id="subtitle" data-typed-text="nginx高性能web服务器详解"></span>
           
         </div>
 
@@ -197,8 +196,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-05 09:30" pubdate>
-          2022年6月5日 上午
+        <time datetime="2022-06-13 18:00" pubdate>
+          2022年6月13日 晚上
         </time>
       </span>
     
@@ -210,7 +209,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          526 字
+          818 字
         
       </span>
     
@@ -222,7 +221,7 @@
         
         
           <!-- compatible with older versions-->
-          2 分钟
+          3 分钟
         
       </span>
     
@@ -268,74 +267,82 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">C语言：作用域规则</h1>
+            <h1 style="display: none">nginx高性能web服务器详解</h1>
             
               <p class="note note-info">
                 
                   
                     <!-- compatible with older versions-->
-                    本文最后更新于：2022年6月12日 下午
+                    本文最后更新于：2022年6月13日 晚上
                   
                 
               </p>
             
             <div class="markdown-body">
               
-              <p><img src="/image/cpro.png" srcset="/img/loading.gif" lazyload></p>
-<h1 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h1><ul>
-<li>在整个程序生命周期内都是有效的</li>
-<li>在任意的函数内部能访问全局变量</li>
-<li>系统会自动对全局变量初始化</li>
-<li>保存在内存的全局存储区中，占用静态的存储单元</li>
+              <h1 id="常见web服务器介绍"><a href="#常见web服务器介绍" class="headerlink" title="常见web服务器介绍"></a>常见web服务器介绍</h1><ul>
+<li>Apache<ul>
+<li>a patchy server</li>
+<li>占据web服务器的半壁江山</li>
+<li>开源</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>数据类型</th>
-<th>初始化默认值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>int</td>
-<td>0</td>
-</tr>
-<tr>
-<td>char</td>
-<td>‘\0’</td>
-</tr>
-<tr>
-<td>float</td>
-<td>0</td>
-</tr>
-<tr>
-<td>double</td>
-<td>0</td>
-</tr>
-<tr>
-<td>pointer</td>
-<td>NULL</td>
-</tr>
-</tbody></table>
-<h1 id="局部变量"><a href="#局部变量" class="headerlink" title="局部变量"></a>局部变量</h1><ul>
-<li>在某个函数或块的内部声明的变量</li>
-<li>只能被该函数或该代码块内部的语句使用</li>
-<li>保存在栈中</li>
+</li>
+<li>Tomcat<ul>
+<li>轻量级应用服务器</li>
+<li>无法满足复杂业务场景</li>
+<li>免费、开源</li>
+<li>体积小，易于安装部署</li>
 </ul>
-<h1 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h1><ul>
-<li>名字的作用域指的是程序中可以使用该名字的部分</li>
-<li>变量或函数的作用域从声明它的地方开始，到其所在的（待编译的）文件的末尾结束</li>
-<li>一个程序具有多个文件，一个变量只能在某个文件中定义一次，而其他文件可以通过extern声明来访问它</li>
+</li>
+<li>Nginx<ul>
+<li>免费、开源、后来居上</li>
+<li>高性能http服务器</li>
+<li>功能多（包括支持反向代理、负载均衡、IMAP/POP3代理服务、SSL等功能）</li>
+<li>常用功能：负载均衡、反向代理、web缓存</li>
 </ul>
-<p>file1：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">extern</span> <span class="hljs-keyword">int</span> sp;<br><span class="hljs-keyword">extern</span> <span class="hljs-keyword">double</span> val[];<span class="hljs-comment">//注意这里</span><br></code></pre></td></tr></table></figure>
-<p>file2:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">int</span> sp = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">double</span> val[MAXVAL];<br></code></pre></td></tr></table></figure>
-<p>这样的话，sp和val可以在file1中使用</p>
-<h1 id="static关键字"><a href="#static关键字" class="headerlink" title="static关键字"></a>static关键字</h1><ul>
-<li>用 static声明限定外部变量与函数，可以将其后声明的对象的作用域限定为被编译源文件的剩余部分</li>
-<li>static 类型的内部变量是一种只能在某个特定函数中使用但一直占据存储空间的变量</li>
+</li>
 </ul>
-<p>在不进行显式初始化的情况下，外部变量和静态变量都将被初始化为 0，而自动变量和寄存器变量的初值则没有定义（即初值为无用的信息）</p>
+<h1 id="Nginx的安装"><a href="#Nginx的安装" class="headerlink" title="Nginx的安装"></a>Nginx的安装</h1><p>官网上的几个版本：</p>
+<ul>
+<li>Mainline version：目前主力在做的版本，开发版</li>
+<li>Stable version：最新稳定版，生产环境上建议使用的版本</li>
+<li>Legacy versions：遗留的老版本的稳定版</li>
+</ul>
+<p>安装：</p>
+<ul>
+<li>由于Nginx升级频繁，Linux下建议通过编译源码进行安装（gcc + automake）</li>
+<li> sudo apt install nginx 命令可以直接安装</li>
+<li> 安装完成后，运行 whereis nginx 以发现程序的安装位置</li>
+<li>pidof nginx可以定位Nginx的进程号</li>
+</ul>
+<p>一些特殊文件：</p>
+<ul>
+<li>index.html：服务启动成功后默认显示的页面</li>
+<li>logs目录：服务器日志</li>
+<li>sbin目录：只有Nginx一个文件（可执行程序）</li>
+</ul>
+<h1 id="Nginx服务的启停控制"><a href="#Nginx服务的启停控制" class="headerlink" title="Nginx服务的启停控制"></a>Nginx服务的启停控制</h1><p>列出进程：</p>
+<ul>
+<li>pidof</li>
+<li>cat nginx.pid</li>
+<li>ps -ef | grep nginx</li>
+</ul>
+<p>常用指令：</p>
+<ul>
+<li>kill signal pid 杀掉进程</li>
+<li>sudo nginx -t  测试Nginx配置文件语法</li>
+<li>sudo nginx -v 版本</li>
+<li>sudo systemctl start nginx 启动nginx</li>
+<li>sudo systemctl stop nginx 停止nginx</li>
+<li>sudo systemctl restart nginx 重启nginx</li>
+<li>sudo systemctl reload nginx 配置更改时，重新加载nginx</li>
+<li>sudo systemctl status nginx 查看Nginx状态</li>
+</ul>
+<h1 id="Nginx基础配置"><a href="#Nginx基础配置" class="headerlink" title="Nginx基础配置"></a>Nginx基础配置</h1><p>nginx的主要配置都放在nginx.conf文件中，#后面的内容被注释</p>
+<p>conf文件的结构：</p>
+<ul>
+<li>全局块：默认配置文件从最开始到events之间的内容</li>
+</ul>
 
               
             </div>
@@ -353,7 +360,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/C%E8%AF%AD%E8%A8%80/" class="category-chain-item">C语言</a>
+  <a href="/categories/web%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">web服务器</a>
   
   
 
@@ -365,13 +372,6 @@
     </div>
   
   
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/C%E8%AF%AD%E8%A8%80/">#C语言</a>
-      
-    </div>
-  
 </div>
 
 
@@ -380,8 +380,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>C语言：作用域规则</div>
-      <div>http://gls.show/p/b163e116/</div>
+      <div>nginx高性能web服务器详解</div>
+      <div>http://gls.show/p/913c096e/</div>
     </div>
     <div class="license-meta">
       
@@ -393,7 +393,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年6月5日</div>
+          <div>2022年6月13日</div>
         </div>
       
       
@@ -423,9 +423,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/p/279b9795/" title="C语言：复杂指针声明">
+                      <a href="/p/8329f3e9/" title="Linux运维常用工具">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">C语言：复杂指针声明</span>
+                        <span class="hidden-mobile">Linux运维常用工具</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -433,8 +433,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/p/e9b29492/" title="CSAPP：链接">
-                        <span class="hidden-mobile">CSAPP：链接</span>
+                      <a href="/p/b703a31c/" title="C语言：预处理详解">
+                        <span class="hidden-mobile">C语言：预处理详解</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
