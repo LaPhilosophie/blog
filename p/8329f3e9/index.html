@@ -16,19 +16,19 @@
   <meta name="author" content="郭佳明">
   <meta name="keywords" content="">
   
-    <meta name="description" content="gdb调试gdb调试：一个简单的入门 ldd 查看程序运行所需的共享库（.so文件）,常用来解决因缺少某个库文件而不能运行的问题 使用方式：ldd + 文件名 输出三列，分别是依赖的库、库的位置、库加载的起始地址  top实时显示系统中各个进程的资源占用状况 交互指令：  i：只显示正在运行的进程 h：帮助命令 q：退出 u：指定显示用户进程 P：按%CPU使用率排行 T：按MITE+排行 M：按">
+    <meta name="description" content="gdb调试gdb调试：一个简单的入门 ldd 查看程序运行所需的共享库（.so文件）,常用来解决因缺少某个库文件而不能运行的问题 使用方式：ldd + 文件名 输出三列，分别是依赖的库、库的位置、库加载的起始地址  top实时显示系统中各个进程的资源占用状况 交互指令：  i：只显示正在运行的进程 h：帮助命令 q：退出 u：指定显示用户进程 P：按%CPU使用率排行 T：按MITE+排行 M：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux运维常用工具">
 <meta property="og:url" content="http://gls.show/p/8329f3e9/index.html">
 <meta property="og:site_name" content="郭佳明的博客">
-<meta property="og:description" content="gdb调试gdb调试：一个简单的入门 ldd 查看程序运行所需的共享库（.so文件）,常用来解决因缺少某个库文件而不能运行的问题 使用方式：ldd + 文件名 输出三列，分别是依赖的库、库的位置、库加载的起始地址  top实时显示系统中各个进程的资源占用状况 交互指令：  i：只显示正在运行的进程 h：帮助命令 q：退出 u：指定显示用户进程 P：按%CPU使用率排行 T：按MITE+排行 M：按">
+<meta property="og:description" content="gdb调试gdb调试：一个简单的入门 ldd 查看程序运行所需的共享库（.so文件）,常用来解决因缺少某个库文件而不能运行的问题 使用方式：ldd + 文件名 输出三列，分别是依赖的库、库的位置、库加载的起始地址  top实时显示系统中各个进程的资源占用状况 交互指令：  i：只显示正在运行的进程 h：帮助命令 q：退出 u：指定显示用户进程 P：按%CPU使用率排行 T：按MITE+排行 M：">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://gls.show/image/default.png">
+<meta property="og:image" content="http://gls.show/image/gnulinux.png">
 <meta property="article:published_time" content="2022-06-13T10:02:05.009Z">
-<meta property="article:modified_time" content="2022-06-13T14:33:19.234Z">
+<meta property="article:modified_time" content="2022-06-14T09:23:01.882Z">
 <meta property="article:author" content="郭佳明">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://gls.show/image/default.png">
+<meta name="twitter:image" content="http://gls.show/image/gnulinux.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -209,7 +209,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          2.2k 字
+          3.5k 字
         
       </span>
     
@@ -221,7 +221,7 @@
         
         
           <!-- compatible with older versions-->
-          7 分钟
+          11 分钟
         
       </span>
     
@@ -273,14 +273,15 @@
                 
                   
                     <!-- compatible with older versions-->
-                    本文最后更新于：2022年6月13日 晚上
+                    本文最后更新于：2022年6月14日 下午
                   
                 
               </p>
             
             <div class="markdown-body">
               
-              <h1 id="gdb调试"><a href="#gdb调试" class="headerlink" title="gdb调试"></a>gdb调试</h1><p><a href="https://gls.show/p/66ee2080/">gdb调试：一个简单的入门</a></p>
+              <p><img src="/image/gnulinux.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="gdb调试"><a href="#gdb调试" class="headerlink" title="gdb调试"></a>gdb调试</h1><p><a href="https://gls.show/p/66ee2080/">gdb调试：一个简单的入门</a></p>
 <h1 id="ldd"><a href="#ldd" class="headerlink" title="ldd"></a>ldd</h1><ul>
 <li>查看程序运行所需的共享库（.so文件）,常用来解决因缺少某个库文件而不能运行的问题</li>
 <li>使用方式：ldd + 文件名</li>
@@ -337,7 +338,41 @@
 <h1 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h1><p>追踪系统调用</p>
 <figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver"><br>- Start tracing <span class="hljs-keyword">a</span> specific <span class="hljs-built_in">process</span> <span class="hljs-keyword">by</span> its PID:<br>  strace -p pid<br><br>- Trace <span class="hljs-keyword">a</span> <span class="hljs-built_in">process</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">filter</span> output <span class="hljs-keyword">by</span> <span class="hljs-keyword">system</span> call:<br>  strace -p pid -e system_call_name<br><br>- Count <span class="hljs-built_in">time</span>, calls, <span class="hljs-keyword">and</span> errors <span class="hljs-keyword">for</span> <span class="hljs-keyword">each</span> <span class="hljs-keyword">system</span> call <span class="hljs-keyword">and</span> report <span class="hljs-keyword">a</span> summary <span class="hljs-keyword">on</span> <span class="hljs-title">program</span> <span class="hljs-title">exit</span>:<br>  strace -p pid -c<br><br>- Show <span class="hljs-keyword">the</span> <span class="hljs-built_in">time</span> spent <span class="hljs-keyword">in</span> every <span class="hljs-keyword">system</span> call:<br>  strace -p pid -T<br><br>- Start tracing <span class="hljs-keyword">a</span> program <span class="hljs-keyword">by</span> executing <span class="hljs-keyword">it</span>:<br>  strace program<br><br>- Start tracing <span class="hljs-built_in">file</span> operations <span class="hljs-keyword">of</span> <span class="hljs-keyword">a</span> program:<br>  strace -e trace=<span class="hljs-built_in">file</span> program<br></code></pre></td></tr></table></figure>
 
-
+<h1 id="readelf"><a href="#readelf" class="headerlink" title="readelf"></a>readelf</h1><ul>
+<li>ELF(Executable and Linking Format)</li>
+<li>elf文件的几种类型<ul>
+<li>可重定位的对象文件(Relocatable file)，比如由汇编器汇编生成的 .o 文件</li>
+<li>可执行的对象文件(Executable file)</li>
+<li>动态库文件，.so文件(Shared object file)</li>
+</ul>
+</li>
+</ul>
+<p>readelf指令的几个常用选项：</p>
+<ul>
+<li>-a列出全部</li>
+<li>-h列出文件头</li>
+<li>-S列出段头</li>
+<li>-s符号表</li>
+</ul>
+<h1 id="objdump"><a href="#objdump" class="headerlink" title="objdump"></a>objdump</h1><ul>
+<li>直接输入objdump可以显示指令选项，man指令可以更详细一些</li>
+<li>-S 尽可能反汇编出源代码，尤其当编译的时候指定了-g这种调试参数时，效果比较明显。隐含了-d参数</li>
+<li>-d 反汇编</li>
+<li>-f 显示文件头信息<h1 id="nm"><a href="#nm" class="headerlink" title="nm"></a>nm</h1>nm 命令显示关于指定 File 中符号的信息<h1 id="wget"><a href="#wget" class="headerlink" title="wget"></a>wget</h1></li>
+<li>wget [参数] [URL地址]</li>
+<li>wegt url 从网络下载一个文件并保存在当前目录</li>
+<li>-O选项可以指定文件名</li>
+<li>-c重新启动下载中断的文件</li>
+<li>-b后台下载</li>
+</ul>
+<h1 id="scp"><a href="#scp" class="headerlink" title="scp"></a>scp</h1><p>secure copy，从远程主机处复制<br>常用命令：</p>
+<ul>
+<li>-r 递归复制整个目录</li>
+<li><code>scp path/to/local_file emote_username@remote_host:path/to/remote_directory</code></li>
+<li><code>scp -i ~/.ssh/private_key local_file remote_host:/path/remote_file</code></li>
+</ul>
+<h1 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h1><p>定时任务</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">crontab<br><br>Schedule cron jobs <span class="hljs-built_in">to</span> run <span class="hljs-keyword">on</span> <span class="hljs-title">a</span> <span class="hljs-title">time</span> <span class="hljs-title">interval</span> <span class="hljs-title">for</span> <span class="hljs-title">the</span> <span class="hljs-title">current</span> <span class="hljs-title">user</span>.<br>Job definition <span class="hljs-built_in">format</span>: <span class="hljs-string">&quot;(min) (hour) (day_of_month) (month) (day_of_week) command_to_execute&quot;</span>.<br>More information: <span class="hljs-keyword">https</span>://manned.org/crontab.<br><br>- Edit <span class="hljs-keyword">the</span> crontab <span class="hljs-built_in">file</span> <span class="hljs-keyword">for</span> <span class="hljs-keyword">the</span> current user:<br>  crontab -e<br><br>- Edit <span class="hljs-keyword">the</span> crontab <span class="hljs-built_in">file</span> <span class="hljs-keyword">for</span> <span class="hljs-keyword">a</span> specific user:<br>  sudo crontab -e -u user<br><br>- Replace <span class="hljs-keyword">the</span> current crontab <span class="hljs-keyword">with</span> <span class="hljs-keyword">the</span> contents <span class="hljs-keyword">of</span> <span class="hljs-keyword">the</span> given <span class="hljs-built_in">file</span>:<br>  crontab path/<span class="hljs-built_in">to</span>/<span class="hljs-built_in">file</span><br><br>- View <span class="hljs-keyword">a</span> list <span class="hljs-keyword">of</span> existing cron jobs <span class="hljs-keyword">for</span> current user:<br>  crontab -l<br><br>- Remove all cron jobs <span class="hljs-keyword">for</span> <span class="hljs-keyword">the</span> current user:<br>  crontab -r<br><br>- Sample job which runs <span class="hljs-keyword">at</span> <span class="hljs-number">10</span>:<span class="hljs-number">00</span> every day (* means <span class="hljs-keyword">any</span> <span class="hljs-built_in">value</span>):<br>  <span class="hljs-number">0</span> <span class="hljs-number">10</span> * * * command_to_execute<br><br>- Sample job which runs every minute <span class="hljs-keyword">on</span> <span class="hljs-title">the</span> <span class="hljs-title">3rd</span> <span class="hljs-title">of</span> <span class="hljs-title">April</span>:<br>  * * <span class="hljs-number">3</span> Apr * command_to_execute<br><br>- Sample job which runs <span class="hljs-keyword">a</span> certain script <span class="hljs-keyword">at</span> <span class="hljs-number">02</span>:<span class="hljs-number">30</span> every Friday:<br>  <span class="hljs-number">30</span> <span class="hljs-number">2</span> * * Fri /absolute/path/<span class="hljs-built_in">to</span>/script.sh<br></code></pre></td></tr></table></figure>
               
             </div>
             <hr/>
@@ -395,6 +430,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/p/3bf4a27/" title="文章标题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">文章标题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
